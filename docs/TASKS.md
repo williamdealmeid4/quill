@@ -20,7 +20,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 |---|---|---|
 | Q001 | Fundação Python | done |
 | Q002 | Configuração tipada e caminhos | done |
-| Q003 | Logs estruturados e redação | pending |
+| Q003 | Logs estruturados e redação | done |
 | Q004 | Modelos, interfaces e erros | pending |
 | Q005 | SQLite e migração inicial | pending |
 | Q006 | Contrato real do Codex e capabilities | pending |
@@ -122,7 +122,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ### Q003 — Logs estruturados e redação
 
-1. **Identificador:** Q003. **Estado:** pending.
+1. **Identificador:** Q003. **Estado:** done.
 2. **Objetivo:** Logs estruturados e redação; produzir a capacidade descrita abaixo, sem implementar tarefas seguintes.
 3. **Pré-requisitos:** Q002=done
 4. **Arquivos envolvidos:**
@@ -138,7 +138,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
    Rodar também os checks gerais pertinentes de [TESTING.md](TESTING.md); opt-in explícito para live_codex e evidência nativa onde exigida.
 8. **Comportamento esperado:** Secret sintético não aparece em nenhum arquivo/erro; JSON de cada linha é válido; rotação e correlação funcionam. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
 9. **Condição de conclusão:** C0 e todos os critérios acima. **Recuperação:** preservar alterações anteriores; interromper/limpar recursos da própria tarefa com finally; se requisito nativo/contrato falhar, registrar blocked com evidência e procedimento necessário, sem workaround inseguro.
-   **Evidências:** ainda não executada; nenhum teste de aplicativo atribuído a esta tarefa.
+   **Evidências:** 2026-11-11T19:20:19+00:00, Linux/Python 3.13.15. RED: módulo de observabilidade ausente. GREEN: 5 testes de segurança novos, suíte total 23 passed. Sync frozen, Ruff check/format, mypy e git diff --check: exit 0. Tokens/cookies/segredos sintéticos em mensagem e exceção não chegam aos arquivos; JSONL válido; configuração repetida gera um handler; 30 mensagens com limite reduzido preservam só 5 backups.
 10. **Dependências para a próxima tarefa:** Q004 (além das demais dependências listadas nela).
 
 ### Q004 — Modelos, interfaces e erros
