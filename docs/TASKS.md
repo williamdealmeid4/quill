@@ -28,7 +28,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 | Q008 | Probes de isolamento Windows 11 | blocked |
 | Q009 | Bootstrap Qt e worker assíncrono | done |
 | Q010 | Manifesto e fixture de avatar | done |
-| Q011 | Máquina de estados da animação | pending |
+| Q011 | Máquina de estados da animação | done |
 | Q012 | Mascote e janela Qt | pending |
 | Q013 | Bridge D-Bus limitada | pending |
 | Q014 | Lifecycle da extensão GNOME | pending |
@@ -313,7 +313,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ### Q011 — Máquina de estados da animação
 
-1. **Identificador:** Q011. **Estado:** pending.
+1. **Identificador:** Q011. **Estado:** done.
 2. **Objetivo:** Máquina de estados da animação; produzir a capacidade descrita abaixo, sem implementar tarefas seguintes.
 3. **Pré-requisitos:** Q004=done, Q010=done
 4. **Arquivos envolvidos:**
@@ -328,7 +328,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
    Rodar também os checks gerais pertinentes de [TESTING.md](TESTING.md); opt-in explícito para live_codex e evidência nativa onde exigida.
 8. **Comportamento esperado:** Transições determinísticas e renderer recebe somente estado/visibilidade/balão; terminar animação não conclui tarefa. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
 9. **Condição de conclusão:** C0 e todos os critérios acima. **Recuperação:** preservar alterações anteriores; interromper/limpar recursos da própria tarefa com finally; se requisito nativo/contrato falhar, registrar blocked com evidência e procedimento necessário, sem workaround inseguro.
-   **Evidências:** ainda não executada; nenhum teste de aplicativo atribuído a esta tarefa.
+   **Evidências:** 2026-11-11T20:38:11+00:00. Sete testes puros passam com Clock/RNG injetados: prioridade de aprovação, erro persistente, sucesso transitório <=1s, piscar, pausa oculto/movimento reduzido e término de turno tratado como verificação. Ruff/formato/mypy passam. AvatarPresentation inclui blinking como campo aditivo para renderers que possuam frames de piscar; não representa uma animação artística pronta.
 10. **Dependências para a próxima tarefa:** Q012 (além das demais dependências listadas nela).
 
 ### Q012 — Mascote e janela Qt
