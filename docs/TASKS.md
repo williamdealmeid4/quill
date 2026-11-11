@@ -25,7 +25,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 | Q005 | SQLite e migração inicial | done |
 | Q006 | Contrato real do Codex e capabilities | done |
 | Q007 | Probes de isolamento Linux | done |
-| Q008 | Probes de isolamento Windows 11 | pending |
+| Q008 | Probes de isolamento Windows 11 | blocked |
 | Q009 | Bootstrap Qt e worker assíncrono | pending |
 | Q010 | Manifesto e fixture de avatar | pending |
 | Q011 | Máquina de estados da animação | pending |
@@ -237,7 +237,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ### Q008 — Probes de isolamento Windows 11
 
-1. **Identificador:** Q008. **Estado:** pending.
+1. **Identificador:** Q008. **Estado:** blocked.
 2. **Objetivo:** Probes de isolamento Windows 11; produzir a capacidade descrita abaixo, sem implementar tarefas seguintes.
 3. **Pré-requisitos:** Q006=done, Q007=done
 4. **Arquivos envolvidos:**
@@ -253,7 +253,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
    Rodar também os checks gerais pertinentes de [TESTING.md](TESTING.md); opt-in explícito para live_codex e evidência nativa onde exigida.
 8. **Comportamento esperado:** Gate comprovado em Windows real; mocks não concluem; nenhuma elevação silenciosa. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
 9. **Condição de conclusão:** C0 e todos os critérios acima. **Recuperação:** preservar alterações anteriores; interromper/limpar recursos da própria tarefa com finally; se requisito nativo/contrato falhar, registrar blocked com evidência e procedimento necessário, sem workaround inseguro.
-   **Evidências:** ainda não executada; nenhum teste de aplicativo atribuído a esta tarefa.
+   **Evidências:** 2026-11-11T20:08:14+00:00. Adaptador Windows preparado sem import de APIs Windows no Linux: exige Win11 x86_64, Codex .exe 0.167.1, readiness=ready e seleção explícita de perfil; não executa setup/elevation. Suíte Windows neste Linux: 1 passed, 7 skipped (não certifica Windows). Suíte padrão: 58 passed, 16 deselected; suíte Linux nativa: 10 passed. Sync frozen, Ruff check/format, mypy e diff-check exit 0. **Impedimento:** nenhum acesso/resultado Windows nativo disponível nesta sessão. **Desbloqueio:** executar a suíte Windows em máquina Win11 e retornar resultados ou fornecer acesso autorizado; pergunta sobre acesso enviada ao usuário. Q009 não iniciada por depender do gate Q008 na ordem aprovada.
 10. **Dependências para a próxima tarefa:** Q009 (além das demais dependências listadas nela).
 
 ### Q009 — Bootstrap Qt e worker assíncrono
@@ -1064,4 +1064,4 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ## Revisão vigente de Q006–Q008
 
-O usuário autorizou os perfis beta e continuação sequencial por etapas. Arquivos adicionais permitidos nesta revisão: AGENTS.md e documentos canônicos de arquitetura, plano, segurança e testes, apenas para registrar a exceção/estado. Captura estável preservada; schemas beta limitados à seleção de perfil. Gates de isolamento/Linux/Windows inalterados. O bloqueio de Q006 está em revalidação.
+O usuário autorizou os perfis beta e continuação sequencial por etapas. Arquivos adicionais permitidos nesta revisão: AGENTS.md e documentos canônicos de arquitetura, plano, segurança e testes, apenas para registrar a exceção/estado. Captura estável preservada; schemas beta limitados à seleção de perfil. Gates de isolamento/Linux/Windows inalterados. Q006 revalidada e concluída; Q007 validada no Linux; Q008 aguarda execução nativa Windows.

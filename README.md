@@ -2,7 +2,7 @@
 
 Assistente pessoal desktop com um furão 2D animado, chat em linguagem natural e integração com o Codex instalado no computador.
 
-**Estado: planejamento; aplicativo ainda não implementado.** A primeira tarefa de código é Q001 e permanece pendente. Esta entrega contém apenas especificação, backlog e instruções de execução.
+**Estado: fundação implementada; interface desktop ainda não disponível.** Q001–Q007 concluídas, incluindo contrato Codex beta autorizado e isolamento Linux validado. Q008 aguarda testes nativos no Windows 11. Consulte TASKS.md para evidências e impedimentos.
 
 ## Objetivo
 
@@ -62,11 +62,19 @@ Veja [SECURITY.md](docs/SECURITY.md) antes de executar qualquer tarefa que inter
 8. Q039–Q041: voz local opcional.
 9. Q042–Q043: empacotamento e distribuição verificável.
 
-Ainda não há comando de instalação do aplicativo. Não executar instruções futuras como se o código já existisse.
+Para validar a fundação (ainda sem janela desktop):
+
+```text
+uv sync --frozen --group dev
+uv run python -m quill --version
+uv run pytest -q
+```
+
+O comando de versão imprime 0.1.0. O avatar/chat será introduzido nas próximas fases; não há assistente desktop completo nesta versão.
 
 ## Próxima execução
 
-Executar **somente Q001**, após ler integralmente AGENTS.md, ARCHITECTURE.md, IMPLEMENTATION_PLAN.md e TASKS.md. Não avançar para Q002 automaticamente.
+Desbloquear **Q008 — probes Windows nativos** conforme [instruções](docs/CODEX_INTEGRATION.md). Após aprovação do gate, continuar Q009 por etapas validadas, conforme autorização vigente registrada em AGENTS.md.
 
 ## Repositório e publicação
 

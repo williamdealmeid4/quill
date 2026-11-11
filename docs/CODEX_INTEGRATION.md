@@ -165,3 +165,20 @@ Inspector real confirmou CLI 0.167.1, autenticação e oito modelos; gpt-6.1-sol
 Dez casos da suíte nativa passam (nove live e um puro). O profile único define default_permissions e usa seleção explícita -P no CLI/permissionProfile no RPC; o App Server exige default_permissions quando o config declara profiles. Runtime inclui apenas binário canônico e :minimal, workspace conforme modo; hooks/plugins/apps/browser/computer/multiagent desabilitados por invocação e MCP declarado explicitamente desabilitado. A configuração global permanece intacta.
 
 O mount privado de /tmp pode aceitar criação de um arquivo visível apenas dentro do sandbox; por isso a verificação usa também sentinela própria em diretório temporário no home e confirma seu conteúdo no host. Não confundir sucesso local em tmp privado com alteração da origem. Probes demonstraram bloqueio de leitura, escrita externa, loopback e aplicação do perfil em command/exec. O probe de execução aninhada usa HOME/CODEX_HOME inexistentes e rede negada; é teste negativo, não um agente autorizado. Supervisor de produção permanece responsabilidade de Q027. Fonte de desativação de hooks: [Hooks](https://learn.chatgpt.com/docs/hooks), consultada nesta execução.
+
+
+### Q008 — gate Windows pendente
+
+Adaptador e testes estão preparados, mas não certificados neste Linux. A detecção exige Windows 11 x86_64 e Codex standalone .exe 0.167.1. Shims .cmd não ganham fallback por shell. windowsSandbox/readiness precisa retornar status=ready; notConfigured/updateRequired impedem execução e exigem procedimento explícito fora do teste. Nenhum setup administrativo é iniciado.
+
+Para validar no PowerShell da máquina Windows, depois de instalar uv e configurar o Codex nessa máquina pelo fluxo oficial:
+
+```powershell
+git clone https://github.com/williamdealmeid4/quill.git
+Set-Location quill
+codex --version
+uv sync --frozen --group dev
+uv run pytest -o "addopts=" -m live_codex tests/security/test_sandbox_windows.py -q
+```
+
+Se o checkout já existir, atualizar preservando alterações locais antes de testar. Enviar apenas versão/build/backend e resumo dos resultados/erros redigidos, nunca auth.json, tokens ou configuração completa. A suíte usa fixtures temporárias, inclusive junction própria, e não modifica projetos pessoais. Sete casos live precisam passar nativamente: leitura, escrita, rede, junction, execução aninhada, read sem write e probe completo. O teste de indisponibilidade também deve passar na suíte padrão. Skips não satisfazem o gate.
