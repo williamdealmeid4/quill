@@ -1,0 +1,13 @@
+{
+  "models": [
+    {
+      "id": "fixture-sol",
+      "display_name": "Fixture Sol",
+      "efforts": [
+        "low",
+        "medium"
+      ]
+    }
+  ],
+  "synthetic": true
+}

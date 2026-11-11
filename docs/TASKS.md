@@ -1,6 +1,6 @@
 # Backlog executável do Quill
 
-Versão 1 — 2026-11-11. **Estado real: somente documentação. Q001 é a primeira tarefa pendente. Nenhuma tarefa de aplicativo foi implementada.**
+Versão 1 — 2026-11-11. **Estado real: Q001–Q005 concluídas; Q006 bloqueada na validação do contrato de segurança do Codex. Interface e MVP ainda não implementados.**
 
 Documentos canônicos: [arquitetura](ARCHITECTURE.md), [plano](IMPLEMENTATION_PLAN.md), [segurança](SECURITY.md), [avatar](AVATAR_DESIGN.md), [Codex](CODEX_INTEGRATION.md) e [testes](TESTING.md).
 
@@ -23,7 +23,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 | Q003 | Logs estruturados e redação | done |
 | Q004 | Modelos, interfaces e erros | done |
 | Q005 | SQLite e migração inicial | done |
-| Q006 | Contrato real do Codex e capabilities | pending |
+| Q006 | Contrato real do Codex e capabilities | blocked |
 | Q007 | Probes de isolamento Linux | pending |
 | Q008 | Probes de isolamento Windows 11 | pending |
 | Q009 | Bootstrap Qt e worker assíncrono | pending |
@@ -65,7 +65,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 ## Registro da entrega documental
 
 - D000: done — entrega documental revisada em 2026-11-11T19:11:47+00:00. Nove arquivos Markdown, 74 links relativos válidos, fences fechadas, 43 tarefas únicas/ordenadas com 430 campos e dependências acíclicas. Scanner local de padrões não encontrou tokens/chaves privadas nem caminhos pessoais alheios ao projeto. Zero arquivos de runtime. Validação por Python/stdlib, exit 0; não há testes pytest de aplicativo nesta entrega. Publicação autorizada em williamdealmeid4/quill; URL, commit e confirmação remota são informados no relatório final da execução.
-- Q001–Q043 permanecem pending; publicar documentos não conclui tarefa de implementação.
+- Na entrega documental inicial, Q001–Q043 permaneceram pending. A execução seguinte concluiu Q001–Q005; evidências abaixo.
 
 ## Tarefas
 
@@ -190,7 +190,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ### Q006 — Contrato real do Codex e capabilities
 
-1. **Identificador:** Q006. **Estado:** pending.
+1. **Identificador:** Q006. **Estado:** blocked.
 2. **Objetivo:** Contrato real do Codex e capabilities; produzir a capacidade descrita abaixo, sem implementar tarefas seguintes.
 3. **Pré-requisitos:** Q004=done, Q005=done
 4. **Arquivos envolvidos:**
@@ -208,7 +208,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
    Rodar também os checks gerais pertinentes de [TESTING.md](TESTING.md); opt-in explícito para live_codex e evidência nativa onde exigida.
 8. **Comportamento esperado:** Schema versionado e matriz documentada; auth não é lida de arquivo; modelo low é resolvido pela conta; nenhuma API experimental adotada. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
 9. **Condição de conclusão:** C0 e todos os critérios acima. **Recuperação:** preservar alterações anteriores; interromper/limpar recursos da própria tarefa com finally; se requisito nativo/contrato falhar, registrar blocked com evidência e procedimento necessário, sem workaround inseguro.
-   **Evidências:** ainda não executada; nenhum teste de aplicativo atribuído a esta tarefa.
+   **Evidências:** 2026-11-11T19:30:10+00:00. Capturados 322 schemas da CLI 0.167.1, hashes no manifest. Inspeção real confirmou autenticação, sem turno agente/config global. Contrato SandboxPolicy não inclui readOnly.access/workspaceWrite.readOnlyAccess/readableRoots. Alternativa permission profiles documentada como beta; não ativada sob o plano estável. 9 testes de capabilities passam; suíte total 53 passed. Sync frozen, Ruff check/format, mypy strict e git diff --check: exit 0. **Impedimento:** contrato estável previsto não comprova leitura restrita. **Desbloqueio:** decisão sobre revisão dos perfis beta ou certificação de contrato estável compatível; pedido de decisão enviado ao usuário. Catálogo live/perfil efetivo não certificados, por isso Q006 não é done e Q007 não começou.
 10. **Dependências para a próxima tarefa:** Q007 (além das demais dependências listadas nela).
 
 ### Q007 — Probes de isolamento Linux

@@ -121,3 +121,24 @@ Proibir Codex recursivo, Quill recursivo e delegação automática. Perfil de fe
 ## Fontes
 
 Consultadas em 2026-11-11: [App Server](https://learn.chatgpt.com/docs/app-server), [modo não interativo](https://learn.chatgpt.com/docs/non-interactive-mode), [segurança e aprovações](https://learn.chatgpt.com/docs/agent-approvals-security), [sandbox Windows](https://learn.chatgpt.com/docs/windows/windows-sandbox). A ajuda local da versão disponível é a confirmação de flags; a captura de schemas em Q006 é requisito antes de implementar wire payloads.
+
+
+## Evidência da primeira execução — Q006 bloqueada
+
+Captura real do Codex 0.167.1: 322 arquivos JSON gerados sem --experimental em schemas/codex/0.167.1; manifest.json registra hashes e métodos. Inspeção de versão/login confirmou autenticação ativa, sem iniciar thread/turno, copiar tokens ou alterar configuração global.
+
+| Controle do contrato planejado | Resultado da captura |
+|---|---|
+| readOnly.access | Ausente: variante expõe apenas type/networkAccess |
+| workspaceWrite.readOnlyAccess | Ausente: variante expõe type/networkAccess/writableRoots e exclusões tmp |
+| readableRoots/readable_roots nas definições exportadas | Nenhuma ocorrência |
+| Metodologia de perfil estável prevista no plano | Não comprovada para restrição de leitura |
+| Alternativa por permission profiles | CLI sandbox oferece -P/--permission-profile; documentação oficial classifica o recurso como beta |
+
+Essa evidência não significa que o Codex não possua nenhuma proteção de leitura: significa que **o contrato estável escolhido para o Quill não expõe os controles previstos**. A configuração livre por thread não é prova de que uma chave inventada será suportada. Os perfis beta não foram ativados porque o planejamento proíbe dependência experimental no MVP.
+
+O inspector devolve sandbox.available=false e motivo explícito; não inicia agente nem consulta catálogo live enquanto esse gate estiver fechado. Os modelos nos testes são sintéticos, não uma lista de acesso da conta.
+
+Procedimento de desbloqueio revisável: escolher entre (A) revisar Q006–Q008 para usar permission profiles beta com configuração apenas por processo, manter proibição de bypass e executar os mesmos probes negativos; (B) certificar uma versão do Codex cujo schema estável implemente o contrato, sem atualização global automática; ou (C) desenhar isolamento externo específico por SO. Nenhuma dessas alternativas está implementada/autorizada como mudança arquitetural nesta execução. Até a decisão, Q006 permanece blocked e Q007–Q043 não são iniciadas conforme ordem estrita do plano.
+
+Fonte verificada em 2026-11-11: [Permissions — beta permission profiles](https://learn.chatgpt.com/docs/permissions). Não atribuir capacidades da documentação mais recente à CLI instalada sem teste.
