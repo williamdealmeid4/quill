@@ -1,0 +1,1 @@
+"""Typed user configuration."""

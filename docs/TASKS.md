@@ -19,7 +19,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 | ID | Tarefa | Estado |
 |---|---|---|
 | Q001 | Fundação Python | done |
-| Q002 | Configuração tipada e caminhos | pending |
+| Q002 | Configuração tipada e caminhos | done |
 | Q003 | Logs estruturados e redação | pending |
 | Q004 | Modelos, interfaces e erros | pending |
 | Q005 | SQLite e migração inicial | pending |
@@ -98,7 +98,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ### Q002 — Configuração tipada e caminhos
 
-1. **Identificador:** Q002. **Estado:** pending.
+1. **Identificador:** Q002. **Estado:** done.
 2. **Objetivo:** Configuração tipada e caminhos; produzir a capacidade descrita abaixo, sem implementar tarefas seguintes.
 3. **Pré-requisitos:** Q001=done
 4. **Arquivos envolvidos:**
@@ -117,7 +117,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
    Rodar também os checks gerais pertinentes de [TESTING.md](TESTING.md); opt-in explícito para live_codex e evidência nativa onde exigida.
 8. **Comportamento esperado:** Arquivo inválido não é resetado; roundtrip preserva valores; falha antes de replace mantém original byte a byte. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
 9. **Condição de conclusão:** C0 e todos os critérios acima. **Recuperação:** preservar alterações anteriores; interromper/limpar recursos da própria tarefa com finally; se requisito nativo/contrato falhar, registrar blocked com evidência e procedimento necessário, sem workaround inseguro.
-   **Evidências:** ainda não executada; nenhum teste de aplicativo atribuído a esta tarefa.
+   **Evidências:** 2026-11-11T19:19:09+00:00, Linux/Python 3.13.15. RED: módulo de configuração ausente; teste de paths falhou por capacidade ausente. GREEN: 15 testes de configuração + 3 CLI = 18 passed. `uv sync --frozen --group dev`, `uv run ruff check .`, `uv run ruff format --check .`, `uv run mypy src/quill`, `uv run pytest -q`, `git diff --check`: exit 0. Injeção de falha em os.replace preservou original e removeu temporário; caminhos de plataforma resolvidos sem criar diretórios.
 10. **Dependências para a próxima tarefa:** Q003 (além das demais dependências listadas nela).
 
 ### Q003 — Logs estruturados e redação
