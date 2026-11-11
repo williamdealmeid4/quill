@@ -27,7 +27,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 | Q007 | Probes de isolamento Linux | done |
 | Q008 | Probes de isolamento Windows 11 | blocked |
 | Q009 | Bootstrap Qt e worker assíncrono | done |
-| Q010 | Manifesto e fixture de avatar | pending |
+| Q010 | Manifesto e fixture de avatar | done |
 | Q011 | Máquina de estados da animação | pending |
 | Q012 | Mascote e janela Qt | pending |
 | Q013 | Bridge D-Bus limitada | pending |
@@ -286,7 +286,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ### Q010 — Manifesto e fixture de avatar
 
-1. **Identificador:** Q010. **Estado:** pending.
+1. **Identificador:** Q010. **Estado:** done.
 2. **Objetivo:** Manifesto e fixture de avatar; produzir a capacidade descrita abaixo, sem implementar tarefas seguintes.
 3. **Pré-requisitos:** Q009=done
 4. **Arquivos envolvidos:**
@@ -308,7 +308,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
    Rodar também os checks gerais pertinentes de [TESTING.md](TESTING.md); opt-in explícito para live_codex e evidência nativa onde exigida.
 8. **Comportamento esperado:** Fixture renderizável com todos os estados; autoria/estado provisório claros; arquivos externos ao avatar nunca carregados. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
 9. **Condição de conclusão:** C0 e todos os critérios acima. **Recuperação:** preservar alterações anteriores; interromper/limpar recursos da própria tarefa com finally; se requisito nativo/contrato falhar, registrar blocked com evidência e procedimento necessário, sem workaround inseguro.
-   **Evidências:** ainda não executada; nenhum teste de aplicativo atribuído a esta tarefa.
+   **Evidências:** 2026-11-11T20:25:41+00:00. Sete testes de assets passam; suíte total 70 passed, 16 deselected. Schema fechado, nove estados, 36 frames em PNG RGBA 1560x1560 (~9,3 MiB decodificados), metadados de proveniência e Attribution. Testes incluem bounds, alpha, traversal e symlink externo. Ruff/formato/mypy/diff-check passam. Asset é fixture geométrico original; não é arte final e não substitui a proposta artística que não foi gerada.
 10. **Dependências para a próxima tarefa:** Q011 (além das demais dependências listadas nela).
 
 ### Q011 — Máquina de estados da animação

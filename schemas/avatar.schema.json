@@ -1,0 +1,767 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "id",
+    "display_name",
+    "author",
+    "license",
+    "frame_size",
+    "anchor",
+    "hit_region",
+    "atlases",
+    "states"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]{0,63}$"
+    },
+    "display_name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "author": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "license": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "frame_size": {
+      "const": [
+        256,
+        256
+      ]
+    },
+    "anchor": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 256
+      }
+    },
+    "hit_region": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 32,
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 256
+        }
+      }
+    },
+    "atlases": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "file",
+          "width",
+          "height"
+        ],
+        "properties": {
+          "file": {
+            "type": "string",
+            "minLength": 1
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2048
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 2048
+          }
+        }
+      }
+    },
+    "states": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "idle",
+        "listening",
+        "thinking",
+        "working",
+        "awaiting_approval",
+        "success",
+        "confused",
+        "error",
+        "speaking"
+      ],
+      "properties": {
+        "idle": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frames",
+            "fps",
+            "loop",
+            "next_state"
+          ],
+          "properties": {
+            "frames": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 256,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "atlas",
+                  "x",
+                  "y",
+                  "width",
+                  "height"
+                ],
+                "properties": {
+                  "atlas": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "width": {
+                    "const": 256
+                  },
+                  "height": {
+                    "const": 256
+                  }
+                }
+              }
+            },
+            "fps": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "loop": {
+              "type": "boolean"
+            },
+            "next_state": {
+              "enum": [
+                null,
+                "idle",
+                "listening",
+                "thinking",
+                "working",
+                "awaiting_approval",
+                "success",
+                "confused",
+                "error",
+                "speaking"
+              ]
+            }
+          }
+        },
+        "listening": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frames",
+            "fps",
+            "loop",
+            "next_state"
+          ],
+          "properties": {
+            "frames": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 256,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "atlas",
+                  "x",
+                  "y",
+                  "width",
+                  "height"
+                ],
+                "properties": {
+                  "atlas": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "width": {
+                    "const": 256
+                  },
+                  "height": {
+                    "const": 256
+                  }
+                }
+              }
+            },
+            "fps": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "loop": {
+              "type": "boolean"
+            },
+            "next_state": {
+              "enum": [
+                null,
+                "idle",
+                "listening",
+                "thinking",
+                "working",
+                "awaiting_approval",
+                "success",
+                "confused",
+                "error",
+                "speaking"
+              ]
+            }
+          }
+        },
+        "thinking": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frames",
+            "fps",
+            "loop",
+            "next_state"
+          ],
+          "properties": {
+            "frames": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 256,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "atlas",
+                  "x",
+                  "y",
+                  "width",
+                  "height"
+                ],
+                "properties": {
+                  "atlas": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "width": {
+                    "const": 256
+                  },
+                  "height": {
+                    "const": 256
+                  }
+                }
+              }
+            },
+            "fps": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "loop": {
+              "type": "boolean"
+            },
+            "next_state": {
+              "enum": [
+                null,
+                "idle",
+                "listening",
+                "thinking",
+                "working",
+                "awaiting_approval",
+                "success",
+                "confused",
+                "error",
+                "speaking"
+              ]
+            }
+          }
+        },
+        "working": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frames",
+            "fps",
+            "loop",
+            "next_state"
+          ],
+          "properties": {
+            "frames": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 256,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "atlas",
+                  "x",
+                  "y",
+                  "width",
+                  "height"
+                ],
+                "properties": {
+                  "atlas": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "width": {
+                    "const": 256
+                  },
+                  "height": {
+                    "const": 256
+                  }
+                }
+              }
+            },
+            "fps": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "loop": {
+              "type": "boolean"
+            },
+            "next_state": {
+              "enum": [
+                null,
+                "idle",
+                "listening",
+                "thinking",
+                "working",
+                "awaiting_approval",
+                "success",
+                "confused",
+                "error",
+                "speaking"
+              ]
+            }
+          }
+        },
+        "awaiting_approval": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frames",
+            "fps",
+            "loop",
+            "next_state"
+          ],
+          "properties": {
+            "frames": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 256,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "atlas",
+                  "x",
+                  "y",
+                  "width",
+                  "height"
+                ],
+                "properties": {
+                  "atlas": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "width": {
+                    "const": 256
+                  },
+                  "height": {
+                    "const": 256
+                  }
+                }
+              }
+            },
+            "fps": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "loop": {
+              "type": "boolean"
+            },
+            "next_state": {
+              "enum": [
+                null,
+                "idle",
+                "listening",
+                "thinking",
+                "working",
+                "awaiting_approval",
+                "success",
+                "confused",
+                "error",
+                "speaking"
+              ]
+            }
+          }
+        },
+        "success": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frames",
+            "fps",
+            "loop",
+            "next_state"
+          ],
+          "properties": {
+            "frames": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 256,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "atlas",
+                  "x",
+                  "y",
+                  "width",
+                  "height"
+                ],
+                "properties": {
+                  "atlas": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "width": {
+                    "const": 256
+                  },
+                  "height": {
+                    "const": 256
+                  }
+                }
+              }
+            },
+            "fps": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "loop": {
+              "type": "boolean"
+            },
+            "next_state": {
+              "enum": [
+                null,
+                "idle",
+                "listening",
+                "thinking",
+                "working",
+                "awaiting_approval",
+                "success",
+                "confused",
+                "error",
+                "speaking"
+              ]
+            }
+          }
+        },
+        "confused": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frames",
+            "fps",
+            "loop",
+            "next_state"
+          ],
+          "properties": {
+            "frames": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 256,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "atlas",
+                  "x",
+                  "y",
+                  "width",
+                  "height"
+                ],
+                "properties": {
+                  "atlas": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "width": {
+                    "const": 256
+                  },
+                  "height": {
+                    "const": 256
+                  }
+                }
+              }
+            },
+            "fps": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "loop": {
+              "type": "boolean"
+            },
+            "next_state": {
+              "enum": [
+                null,
+                "idle",
+                "listening",
+                "thinking",
+                "working",
+                "awaiting_approval",
+                "success",
+                "confused",
+                "error",
+                "speaking"
+              ]
+            }
+          }
+        },
+        "error": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frames",
+            "fps",
+            "loop",
+            "next_state"
+          ],
+          "properties": {
+            "frames": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 256,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "atlas",
+                  "x",
+                  "y",
+                  "width",
+                  "height"
+                ],
+                "properties": {
+                  "atlas": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "width": {
+                    "const": 256
+                  },
+                  "height": {
+                    "const": 256
+                  }
+                }
+              }
+            },
+            "fps": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "loop": {
+              "type": "boolean"
+            },
+            "next_state": {
+              "enum": [
+                null,
+                "idle",
+                "listening",
+                "thinking",
+                "working",
+                "awaiting_approval",
+                "success",
+                "confused",
+                "error",
+                "speaking"
+              ]
+            }
+          }
+        },
+        "speaking": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "frames",
+            "fps",
+            "loop",
+            "next_state"
+          ],
+          "properties": {
+            "frames": {
+              "type": "array",
+              "minItems": 1,
+              "maxItems": 256,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "atlas",
+                  "x",
+                  "y",
+                  "width",
+                  "height"
+                ],
+                "properties": {
+                  "atlas": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "x": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "y": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 2047
+                  },
+                  "width": {
+                    "const": 256
+                  },
+                  "height": {
+                    "const": 256
+                  }
+                }
+              }
+            },
+            "fps": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 30
+            },
+            "loop": {
+              "type": "boolean"
+            },
+            "next_state": {
+              "enum": [
+                null,
+                "idle",
+                "listening",
+                "thinking",
+                "working",
+                "awaiting_approval",
+                "success",
+                "confused",
+                "error",
+                "speaking"
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,357 @@
+{
+  "schema_version": 1,
+  "id": "quill",
+  "display_name": "Quill — avatar técnico",
+  "author": "Quill project",
+  "license": "Technical fixture; distribution license pending",
+  "frame_size": [
+    256,
+    256
+  ],
+  "anchor": [
+    128,
+    224
+  ],
+  "hit_region": [
+    [
+      12,
+      42
+    ],
+    [
+      230,
+      42
+    ],
+    [
+      230,
+      224
+    ],
+    [
+      12,
+      224
+    ]
+  ],
+  "atlases": [
+    {
+      "file": "atlas-0.png",
+      "width": 1560,
+      "height": 1560
+    }
+  ],
+  "states": {
+    "idle": {
+      "frames": [
+        {
+          "atlas": "atlas-0.png",
+          "x": 2,
+          "y": 2,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 262,
+          "y": 2,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 522,
+          "y": 2,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 782,
+          "y": 2,
+          "width": 256,
+          "height": 256
+        }
+      ],
+      "fps": 12,
+      "loop": true,
+      "next_state": null
+    },
+    "listening": {
+      "frames": [
+        {
+          "atlas": "atlas-0.png",
+          "x": 1042,
+          "y": 2,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 1302,
+          "y": 2,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 2,
+          "y": 262,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 262,
+          "y": 262,
+          "width": 256,
+          "height": 256
+        }
+      ],
+      "fps": 12,
+      "loop": true,
+      "next_state": null
+    },
+    "thinking": {
+      "frames": [
+        {
+          "atlas": "atlas-0.png",
+          "x": 522,
+          "y": 262,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 782,
+          "y": 262,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 1042,
+          "y": 262,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 1302,
+          "y": 262,
+          "width": 256,
+          "height": 256
+        }
+      ],
+      "fps": 12,
+      "loop": true,
+      "next_state": null
+    },
+    "working": {
+      "frames": [
+        {
+          "atlas": "atlas-0.png",
+          "x": 2,
+          "y": 522,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 262,
+          "y": 522,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 522,
+          "y": 522,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 782,
+          "y": 522,
+          "width": 256,
+          "height": 256
+        }
+      ],
+      "fps": 18,
+      "loop": true,
+      "next_state": null
+    },
+    "awaiting_approval": {
+      "frames": [
+        {
+          "atlas": "atlas-0.png",
+          "x": 1042,
+          "y": 522,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 1302,
+          "y": 522,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 2,
+          "y": 782,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 262,
+          "y": 782,
+          "width": 256,
+          "height": 256
+        }
+      ],
+      "fps": 12,
+      "loop": true,
+      "next_state": null
+    },
+    "success": {
+      "frames": [
+        {
+          "atlas": "atlas-0.png",
+          "x": 522,
+          "y": 782,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 782,
+          "y": 782,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 1042,
+          "y": 782,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 1302,
+          "y": 782,
+          "width": 256,
+          "height": 256
+        }
+      ],
+      "fps": 18,
+      "loop": false,
+      "next_state": null
+    },
+    "confused": {
+      "frames": [
+        {
+          "atlas": "atlas-0.png",
+          "x": 2,
+          "y": 1042,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 262,
+          "y": 1042,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 522,
+          "y": 1042,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 782,
+          "y": 1042,
+          "width": 256,
+          "height": 256
+        }
+      ],
+      "fps": 12,
+      "loop": false,
+      "next_state": null
+    },
+    "error": {
+      "frames": [
+        {
+          "atlas": "atlas-0.png",
+          "x": 1042,
+          "y": 1042,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 1302,
+          "y": 1042,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 2,
+          "y": 1302,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 262,
+          "y": 1302,
+          "width": 256,
+          "height": 256
+        }
+      ],
+      "fps": 12,
+      "loop": false,
+      "next_state": null
+    },
+    "speaking": {
+      "frames": [
+        {
+          "atlas": "atlas-0.png",
+          "x": 522,
+          "y": 1302,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 782,
+          "y": 1302,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 1042,
+          "y": 1302,
+          "width": 256,
+          "height": 256
+        },
+        {
+          "atlas": "atlas-0.png",
+          "x": 1302,
+          "y": 1302,
+          "width": 256,
+          "height": 256
+        }
+      ],
+      "fps": 12,
+      "loop": true,
+      "next_state": null
+    }
+  }
+}

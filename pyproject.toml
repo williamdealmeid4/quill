@@ -8,6 +8,7 @@ version = "0.1.0"
 description = "Assistente desktop com avatar animado e automação consentida"
 requires-python = ">=3.13,<3.14"
 dependencies = [
+    "jsonschema>=4.26.0",
     "platformdirs>=4.14.5",
     "pyside6-essentials==6.12.0",
 ]
@@ -18,6 +19,7 @@ dev = [
     "ruff",
     "mypy",
     "pytest-qt>=4.5.0",
+    "types-jsonschema>=4.26.0.20261006",
 ]
 
 [tool.hatch.build.targets.wheel]
