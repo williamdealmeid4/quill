@@ -158,3 +158,10 @@ O usuário também autorizou etapas sucessivas, cada uma validada e commitada se
 ### Q006 revalidada
 
 Inspector real confirmou CLI 0.167.1, autenticação e oito modelos; gpt-6.1-sol aceita low e corresponde ao modelo já configurado. Nenhum turno foi criado. Captura beta limitada e independente; metadados nativos de configuração indicaram ausência de sandbox_mode legado e MCP declarado. O contrato agora é aceito, mas o inspector mantém sandbox.available=false até probes nativos. Primeiro probe CLI com -P permitiu escrita no workspace e negou leitura de sentinela externa; isso não substitui os demais casos de Q007.
+
+
+### Q007 — evidência Linux
+
+Dez casos da suíte nativa passam (nove live e um puro). O profile único define default_permissions e usa seleção explícita -P no CLI/permissionProfile no RPC; o App Server exige default_permissions quando o config declara profiles. Runtime inclui apenas binário canônico e :minimal, workspace conforme modo; hooks/plugins/apps/browser/computer/multiagent desabilitados por invocação e MCP declarado explicitamente desabilitado. A configuração global permanece intacta.
+
+O mount privado de /tmp pode aceitar criação de um arquivo visível apenas dentro do sandbox; por isso a verificação usa também sentinela própria em diretório temporário no home e confirma seu conteúdo no host. Não confundir sucesso local em tmp privado com alteração da origem. Probes demonstraram bloqueio de leitura, escrita externa, loopback e aplicação do perfil em command/exec. O probe de execução aninhada usa HOME/CODEX_HOME inexistentes e rede negada; é teste negativo, não um agente autorizado. Supervisor de produção permanece responsabilidade de Q027. Fonte de desativação de hooks: [Hooks](https://learn.chatgpt.com/docs/hooks), consultada nesta execução.

@@ -1,6 +1,6 @@
 # Backlog executável do Quill
 
-Versão 1 — 2026-11-11. **Estado real: Q001–Q005 concluídas; Q006 concluída após revisão autorizada dos perfis beta; Q007 é a próxima etapa de validação. Interface e MVP ainda não implementados.**
+Versão 1 — 2026-11-11. **Estado real: Q001–Q005 concluídas; Q006 concluída após revisão autorizada dos perfis beta; Q007 validada no Linux; Q008 aguarda validação Windows. Interface e MVP ainda não implementados.**
 
 Documentos canônicos: [arquitetura](ARCHITECTURE.md), [plano](IMPLEMENTATION_PLAN.md), [segurança](SECURITY.md), [avatar](AVATAR_DESIGN.md), [Codex](CODEX_INTEGRATION.md) e [testes](TESTING.md).
 
@@ -24,7 +24,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 | Q004 | Modelos, interfaces e erros | done |
 | Q005 | SQLite e migração inicial | done |
 | Q006 | Contrato real do Codex e capabilities | done |
-| Q007 | Probes de isolamento Linux | pending |
+| Q007 | Probes de isolamento Linux | done |
 | Q008 | Probes de isolamento Windows 11 | pending |
 | Q009 | Bootstrap Qt e worker assíncrono | pending |
 | Q010 | Manifesto e fixture de avatar | pending |
@@ -216,7 +216,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ### Q007 — Probes de isolamento Linux
 
-1. **Identificador:** Q007. **Estado:** pending.
+1. **Identificador:** Q007. **Estado:** done.
 2. **Objetivo:** Probes de isolamento Linux; produzir a capacidade descrita abaixo, sem implementar tarefas seguintes.
 3. **Pré-requisitos:** Q006=done
 4. **Arquivos envolvidos:**
@@ -232,7 +232,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
    Rodar também os checks gerais pertinentes de [TESTING.md](TESTING.md); opt-in explícito para live_codex e evidência nativa onde exigida.
 8. **Comportamento esperado:** Todos os testes negativos reais passam no Linux; nenhum recurso pessoal usado; evidência registra versão, policy digest e cleanup. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
 9. **Condição de conclusão:** C0 e todos os critérios acima. **Recuperação:** preservar alterações anteriores; interromper/limpar recursos da própria tarefa com finally; se requisito nativo/contrato falhar, registrar blocked com evidência e procedimento necessário, sem workaround inseguro.
-   **Evidências:** ainda não executada; nenhum teste de aplicativo atribuído a esta tarefa.
+   **Evidências:** 2026-11-11T20:04:29+00:00. Suíte nativa `uv run pytest -o addopts='' tests/security/test_sandbox_linux.py -q`: 10 passed, exit 0 (inclui um caso puro e nove casos live). Suíte padrão: 57 passed, 9 deselected; sync frozen, Ruff check/format, mypy strict e git diff --check: exit 0. Sentinelas descartáveis em tmp e diretório temporário próprio no home; nenhuma credencial real lida/copied. Comprovados limites de leitura/escrita/rede, RPC command/exec com permissionProfile, read sem write, env sem BASH_ENV e execução aninhada sem credenciais/rede não concluída. Hooks/plugins/apps/browser/computer/multiagent desabilitados por processo; MCPs declarados inventariados e desabilitados individualmente. Observação: gravação em tmp privado pode ter sucesso no namespace sem alterar a sentinela host; teste separado no home exige negação real.
 10. **Dependências para a próxima tarefa:** Q008 (além das demais dependências listadas nela).
 
 ### Q008 — Probes de isolamento Windows 11
