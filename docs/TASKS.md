@@ -22,7 +22,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 | Q002 | Configuração tipada e caminhos | done |
 | Q003 | Logs estruturados e redação | done |
 | Q004 | Modelos, interfaces e erros | done |
-| Q005 | SQLite e migração inicial | pending |
+| Q005 | SQLite e migração inicial | done |
 | Q006 | Contrato real do Codex e capabilities | pending |
 | Q007 | Probes de isolamento Linux | pending |
 | Q008 | Probes de isolamento Windows 11 | pending |
@@ -167,7 +167,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ### Q005 — SQLite e migração inicial
 
-1. **Identificador:** Q005. **Estado:** pending.
+1. **Identificador:** Q005. **Estado:** done.
 2. **Objetivo:** SQLite e migração inicial; produzir a capacidade descrita abaixo, sem implementar tarefas seguintes.
 3. **Pré-requisitos:** Q004=done
 4. **Arquivos envolvidos:**
@@ -183,7 +183,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
    Rodar também os checks gerais pertinentes de [TESTING.md](TESTING.md); opt-in explícito para live_codex e evidência nativa onde exigida.
 8. **Comportamento esperado:** Reabrir banco mantém dados/versão; falha não deixa migração pela metade; queries parametrizadas e ownership de thread comprovados. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
 9. **Condição de conclusão:** C0 e todos os critérios acima. **Recuperação:** preservar alterações anteriores; interromper/limpar recursos da própria tarefa com finally; se requisito nativo/contrato falhar, registrar blocked com evidência e procedimento necessário, sem workaround inseguro.
-   **Evidências:** ainda não executada; nenhum teste de aplicativo atribuído a esta tarefa.
+   **Evidências:** 2026-11-11T19:25:52+00:00, Linux/Python 3.13.15. RED: pacote memory ausente. GREEN: 9 testes de persistência; suíte total 44 passed. Sync frozen, Ruff check/format, mypy strict e git diff --check: exit 0. Testes em arquivos SQLite temporários comprovam WAL, migração reiniciável/rollback, FK, estado+evento atômicos, submissão única, sequência crescente, paginação sem duplicação, erro de disco cheio e conexão criada fora da thread principal.
 10. **Dependências para a próxima tarefa:** Q006 (além das demais dependências listadas nela).
 
 ## Fase — Viabilidade e segurança
