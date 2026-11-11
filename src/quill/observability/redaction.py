@@ -2,7 +2,7 @@
 
 import re
 
-type JsonValue = None | bool | int | float | str | list[JsonValue] | dict[str, JsonValue]
+from quill.core.models import JsonValue as JsonValue
 
 _SENSITIVE_KEY = re.compile(
     r"authorization|cookie|password|passwd|secret|token|api[_-]?key", re.IGNORECASE

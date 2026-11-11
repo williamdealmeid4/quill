@@ -21,7 +21,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 | Q001 | Fundação Python | done |
 | Q002 | Configuração tipada e caminhos | done |
 | Q003 | Logs estruturados e redação | done |
-| Q004 | Modelos, interfaces e erros | pending |
+| Q004 | Modelos, interfaces e erros | done |
 | Q005 | SQLite e migração inicial | pending |
 | Q006 | Contrato real do Codex e capabilities | pending |
 | Q007 | Probes de isolamento Linux | pending |
@@ -143,7 +143,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ### Q004 — Modelos, interfaces e erros
 
-1. **Identificador:** Q004. **Estado:** pending.
+1. **Identificador:** Q004. **Estado:** done.
 2. **Objetivo:** Modelos, interfaces e erros; produzir a capacidade descrita abaixo, sem implementar tarefas seguintes.
 3. **Pré-requisitos:** Q003=done
 4. **Arquivos envolvidos:**
@@ -162,7 +162,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
    Rodar também os checks gerais pertinentes de [TESTING.md](TESTING.md); opt-in explícito para live_codex e evidência nativa onde exigida.
 8. **Comportamento esperado:** Todos os nomes/tipos da arquitetura existem; core não importa Qt, banco, psutil ou código de plataforma. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
 9. **Condição de conclusão:** C0 e todos os critérios acima. **Recuperação:** preservar alterações anteriores; interromper/limpar recursos da própria tarefa com finally; se requisito nativo/contrato falhar, registrar blocked com evidência e procedimento necessário, sem workaround inseguro.
-   **Evidências:** ainda não executada; nenhum teste de aplicativo atribuído a esta tarefa.
+   **Evidências:** 2026-11-11T19:22:41+00:00, Linux/Python 3.13.15. RED: módulo core ausente. GREEN: suíte total 35 passed, incluindo 12 casos novos de DTOs/transições, UTC, UUID, NaN, erro seguro e imutabilidade. Sync frozen, Ruff check/format, mypy strict (13 fontes) e git diff --check: exit 0. Protocols usam apenas stdlib/core; JsonValue centralizado com reexport compatível para observabilidade.
 10. **Dependências para a próxima tarefa:** Q005 (além das demais dependências listadas nela).
 
 ### Q005 — SQLite e migração inicial
