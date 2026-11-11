@@ -142,3 +142,19 @@ O inspector devolve sandbox.available=false e motivo explícito; não inicia age
 Procedimento de desbloqueio revisável: escolher entre (A) revisar Q006–Q008 para usar permission profiles beta com configuração apenas por processo, manter proibição de bypass e executar os mesmos probes negativos; (B) certificar uma versão do Codex cujo schema estável implemente o contrato, sem atualização global automática; ou (C) desenhar isolamento externo específico por SO. Nenhuma dessas alternativas está implementada/autorizada como mudança arquitetural nesta execução. Até a decisão, Q006 permanece blocked e Q007–Q043 não são iniciadas conforme ordem estrita do plano.
 
 Fonte verificada em 2026-11-11: [Permissions — beta permission profiles](https://learn.chatgpt.com/docs/permissions). Não atribuir capacidades da documentação mais recente à CLI instalada sem teste.
+
+
+## Revisão autorizada — perfis de permissão beta
+
+Em 2026-11-11, o usuário autorizou revisar Q006–Q008 para perfis beta, mantendo configuração apenas por processo e todos os testes de isolamento. A exceção é restrita a initialize.capabilities.experimentalApi, permissions/runtimeWorkspaceRoots em thread/start, thread/resume e turn/start, além de command/exec.permissionProfile. Demais APIs experimentais continuam proibidas.
+
+O contrato beta é capturado com hashes em schemas/codex/0.167.1/permissions-beta. Contrato aprovado não comprova sandbox: available/restricted_read/bounded_write continuam falsos até probes nativos. Não combinar permissions com sandbox/sandboxPolicy legados. Perfil tem nome único por execução: :minimal e runtime canônico read, somente workspace read/write conforme modo, network.enabled=false. Config global e credenciais não são copiadas nem alteradas.
+
+Probe documentado: codex sandbox -P <perfil> --include-managed-config -C <workspace>, com permissions.<perfil> via -c. Seleção explícita será verificada por sentinelas, sem presumir que default_permissions sobrepõe sandbox_mode antigo. App Server seleciona perfil no request e não envia política legada no mesmo request. Q008 continua exigindo Windows nativo.
+
+O usuário também autorizou etapas sucessivas, cada uma validada e commitada separadamente, substituindo a parada inicial após uma tarefa. Os gates de segurança e plataforma permanecem. O bloqueio anterior é histórico e será atualizado com evidências. Fonte: [Permissions](https://learn.chatgpt.com/docs/permissions), consultada nesta revisão.
+
+
+### Q006 revalidada
+
+Inspector real confirmou CLI 0.167.1, autenticação e oito modelos; gpt-6.1-sol aceita low e corresponde ao modelo já configurado. Nenhum turno foi criado. Captura beta limitada e independente; metadados nativos de configuração indicaram ausência de sandbox_mode legado e MCP declarado. O contrato agora é aceito, mas o inspector mantém sandbox.available=false até probes nativos. Primeiro probe CLI com -P permitiu escrita no workspace e negou leitura de sentinela externa; isso não substitui os demais casos de Q007.

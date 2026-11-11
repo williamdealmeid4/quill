@@ -331,7 +331,13 @@
     "v2/WindowsSandboxSetupCompletedNotification.json": "dc5383ae8fc2a46badbc2dab3ccd0447fed97729c2d5a177e28c4a7e2a60c329",
     "v2/WindowsSandboxSetupStartParams.json": "8610d077fff4fc5811f2e33dea82617a15ffb82f08e55e1540aef877133f5b4f",
     "v2/WindowsSandboxSetupStartResponse.json": "830bf89deac3e73e36b7d9799ceed32ee25e782c30b1d25266374aa020d3bc7e",
-    "v2/WindowsWorldWritableWarningNotification.json": "bfa34d4890c8121a04412b8d53314a13adf98289fdd948857fd97b808dcbe79e"
+    "v2/WindowsWorldWritableWarningNotification.json": "bfa34d4890c8121a04412b8d53314a13adf98289fdd948857fd97b808dcbe79e",
+    "permissions-beta/v1/InitializeParams.json": "c608ff6bdd94e661423dca9b44cd1dcea7eac610f74e1310284c61eab64280bc",
+    "permissions-beta/v2/ThreadStartParams.json": "80a40a7fac15b4bf70efb7f893fb353acc0a0d30c68f54aee4f01923deca85de",
+    "permissions-beta/v2/ThreadResumeParams.json": "9642460eb42e9a6e8fa8e12b4381e8ed939d10b1ad8690e694d84467ea76d41a",
+    "permissions-beta/v2/TurnStartParams.json": "d13cb408b906669e8d3e8694b42148a75180d4dcd0eeac6867271add8dfa1864",
+    "permissions-beta/v2/CommandExecParams.json": "fd034b4c85d7b6f466e30a3cbb73db86be1263aca3f81b89b547f14817dfb62e",
+    "permissions-beta/v2/ThreadStartResponse.json": "d98f3ee79c052e04fda92f60028249e6685389a017bf190b6c2c418d06533375"
   },
   "supported_methods": [
     "account/gatewayOAuth/cancel",
@@ -462,6 +468,46 @@
     ]
   },
   "restricted_read": false,
-  "compatibility": "blocked",
-  "reason": "SandboxPolicy readOnly não expõe access; workspaceWrite não expõe readOnlyAccess; nenhuma definição contém readableRoots/readable_roots. Isolamento de leitura obrigatório não representável neste contrato estável."
+  "compatibility": "contract_verified_runtime_probes_pending",
+  "reason": "Revisão autorizada para perfis beta; controles nativos sujeitos a Q007/Q008.",
+  "beta_contract": {
+    "approved": true,
+    "scope": "permission_profiles_only",
+    "generator_argv": [
+      "codex",
+      "app-server",
+      "generate-json-schema",
+      "--experimental",
+      "--out",
+      "<temporary-directory>"
+    ],
+    "files": [
+      "v1/InitializeParams.json",
+      "v2/ThreadStartParams.json",
+      "v2/ThreadResumeParams.json",
+      "v2/TurnStartParams.json",
+      "v2/CommandExecParams.json",
+      "v2/ThreadStartResponse.json"
+    ],
+    "allowed_fields": {
+      "initialize.capabilities": [
+        "experimentalApi"
+      ],
+      "thread/start": [
+        "permissions",
+        "runtimeWorkspaceRoots"
+      ],
+      "thread/resume": [
+        "permissions",
+        "runtimeWorkspaceRoots"
+      ],
+      "turn/start": [
+        "permissions",
+        "runtimeWorkspaceRoots"
+      ],
+      "command/exec": [
+        "permissionProfile"
+      ]
+    }
+  }
 }

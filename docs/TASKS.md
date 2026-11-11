@@ -1,6 +1,6 @@
 # Backlog executável do Quill
 
-Versão 1 — 2026-11-11. **Estado real: Q001–Q005 concluídas; Q006 bloqueada na validação do contrato de segurança do Codex. Interface e MVP ainda não implementados.**
+Versão 1 — 2026-11-11. **Estado real: Q001–Q005 concluídas; Q006 concluída após revisão autorizada dos perfis beta; Q007 é a próxima etapa de validação. Interface e MVP ainda não implementados.**
 
 Documentos canônicos: [arquitetura](ARCHITECTURE.md), [plano](IMPLEMENTATION_PLAN.md), [segurança](SECURITY.md), [avatar](AVATAR_DESIGN.md), [Codex](CODEX_INTEGRATION.md) e [testes](TESTING.md).
 
@@ -23,7 +23,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 | Q003 | Logs estruturados e redação | done |
 | Q004 | Modelos, interfaces e erros | done |
 | Q005 | SQLite e migração inicial | done |
-| Q006 | Contrato real do Codex e capabilities | blocked |
+| Q006 | Contrato real do Codex e capabilities | done |
 | Q007 | Probes de isolamento Linux | pending |
 | Q008 | Probes de isolamento Windows 11 | pending |
 | Q009 | Bootstrap Qt e worker assíncrono | pending |
@@ -190,7 +190,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ### Q006 — Contrato real do Codex e capabilities
 
-1. **Identificador:** Q006. **Estado:** blocked.
+1. **Identificador:** Q006. **Estado:** done.
 2. **Objetivo:** Contrato real do Codex e capabilities; produzir a capacidade descrita abaixo, sem implementar tarefas seguintes.
 3. **Pré-requisitos:** Q004=done, Q005=done
 4. **Arquivos envolvidos:**
@@ -202,14 +202,17 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
    - Modificar somente o progresso desta entrada em `docs/TASKS.md`.
 5. **Instruções técnicas:** Escopo dos diretórios: schema da versão instalada, manifest com versão/hash/métodos e fixtures redigidas de handshake/catálogo/erro; sem dados pessoais. Executar somente help/version/login status/gerador de schema, sem turno agente. Confirmar flags de perfil por invocação, auth, ferramentas herdadas, políticas e API estável. Preencher matriz concreta em CODEX_INTEGRATION sem inventar campos. Se faltar controle, blocked.
    **Entradas e saídas / interfaces:** inspect_cli(executable:Path)->ExecutorCapabilities (async); validate_schema_manifest(path:Path)->None; choose_model(catalog:tuple[ModelCapability,...],selected_id:str|None)->ModelCapability. Vários Sol sem seleção -> MODEL_UNAVAILABLE com opções, não escolha silenciosa.
-6. **Critérios de aceitação:** Schema versionado e matriz documentada; auth não é lida de arquivo; modelo low é resolvido pela conta; nenhuma API experimental adotada.
+6. **Critérios de aceitação:** Schema versionado e matriz documentada; auth não é lida de arquivo; modelo low é resolvido pela conta; somente a exceção de permission profiles beta autorizada adotada.
 7. **Testes necessários:** test_supported_manifest; test_missing_required_method_blocks; test_model_missing_low_blocks; test_multiple_sol_requires_selection; test_unsupported_version_blocks. Fixtures não iniciam Codex.
    **Comando específico:** `uv run pytest tests/unit/test_capabilities.py -q`
    Rodar também os checks gerais pertinentes de [TESTING.md](TESTING.md); opt-in explícito para live_codex e evidência nativa onde exigida.
-8. **Comportamento esperado:** Schema versionado e matriz documentada; auth não é lida de arquivo; modelo low é resolvido pela conta; nenhuma API experimental adotada. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
+8. **Comportamento esperado:** Schema versionado e matriz documentada; auth não é lida de arquivo; modelo low é resolvido pela conta; somente a exceção de permission profiles beta autorizada adotada. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
 9. **Condição de conclusão:** C0 e todos os critérios acima. **Recuperação:** preservar alterações anteriores; interromper/limpar recursos da própria tarefa com finally; se requisito nativo/contrato falhar, registrar blocked com evidência e procedimento necessário, sem workaround inseguro.
    **Evidências:** 2026-11-11T19:30:10+00:00. Capturados 322 schemas da CLI 0.167.1, hashes no manifest. Inspeção real confirmou autenticação, sem turno agente/config global. Contrato SandboxPolicy não inclui readOnly.access/workspaceWrite.readOnlyAccess/readableRoots. Alternativa permission profiles documentada como beta; não ativada sob o plano estável. 9 testes de capabilities passam; suíte total 53 passed. Sync frozen, Ruff check/format, mypy strict e git diff --check: exit 0. **Impedimento:** contrato estável previsto não comprova leitura restrita. **Desbloqueio:** decisão sobre revisão dos perfis beta ou certificação de contrato estável compatível; pedido de decisão enviado ao usuário. Catálogo live/perfil efetivo não certificados, por isso Q006 não é done e Q007 não começou.
 10. **Dependências para a próxima tarefa:** Q007 (além das demais dependências listadas nela).
+
+
+**Revalidação autorizada:** perfis beta selecionados explicitamente, sem campos legados no mesmo request. Inspector real obteve oito modelos e confirmou gpt-6.1-sol/low, já selecionado na configuração local. Captura beta separada de seis schemas com hashes, validação de aprovação/escopo/campos e parser de catálogo. Suíte: 56 passed; Ruff, formato, mypy e diff-check exit 0. sandbox.available continua false até Q007/Q008: contrato não é prova de runtime. Data UTC: 2026-11-11T19:54:43+00:00
 
 ### Q007 — Probes de isolamento Linux
 
@@ -1057,3 +1060,8 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 9. **Condição de conclusão:** C0 e todos os critérios acima. **Recuperação:** preservar alterações anteriores; interromper/limpar recursos da própria tarefa com finally; se requisito nativo/contrato falhar, registrar blocked com evidência e procedimento necessário, sem workaround inseguro.
    **Evidências:** ainda não executada; nenhum teste de aplicativo atribuído a esta tarefa.
 10. **Dependências para a próxima tarefa:** Nenhuma tarefa adicional autorizada; release público exige autorização específica..
+
+
+## Revisão vigente de Q006–Q008
+
+O usuário autorizou os perfis beta e continuação sequencial por etapas. Arquivos adicionais permitidos nesta revisão: AGENTS.md e documentos canônicos de arquitetura, plano, segurança e testes, apenas para registrar a exceção/estado. Captura estável preservada; schemas beta limitados à seleção de perfil. Gates de isolamento/Linux/Windows inalterados. O bloqueio de Q006 está em revalidação.

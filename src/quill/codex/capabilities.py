@@ -5,10 +5,18 @@ import hashlib
 import json
 import os
 import re
+import tempfile
 from pathlib import Path
+from typing import cast
 
 from quill.core.errors import DomainError, ErrorCode
-from quill.core.models import ErrorInfo, ExecutorCapabilities, ModelCapability, SandboxCapabilities
+from quill.core.models import (
+    ErrorInfo,
+    ExecutorCapabilities,
+    JsonValue,
+    ModelCapability,
+    SandboxCapabilities,
+)
 
 _KNOWN_VERSIONS = frozenset({"0.167.1"})
 _REQUIRED_METHODS = frozenset(
@@ -28,7 +36,7 @@ def _failure(message: str, code: ErrorCode = ErrorCode.PROTOCOL_INCOMPATIBLE) ->
 
 
 def validate_schema_manifest(path: Path) -> None:
-    """Verify capture integrity and required stable read-access policy fields."""
+    """Verify integrity and the narrowly authorized permission-profile beta contract."""
     try:
         value = json.loads(path.read_text(encoding="utf-8"))
         if not isinstance(value, dict) or value.get("cli_version") not in _KNOWN_VERSIONS:
@@ -46,17 +54,24 @@ def validate_schema_manifest(path: Path) -> None:
                 raise _failure("Divergência de hash do schema")
         if not _REQUIRED_METHODS.issubset(value.get("supported_methods", [])):
             raise _failure("Métodos obrigatórios ausentes")
-        schema = json.loads((path.parent / "v2/TurnStartParams.json").read_text())
-        variants = schema["definitions"]["SandboxPolicy"]["oneOf"]
-        properties = {
-            item["properties"]["type"]["enum"][0]: item["properties"] for item in variants
+        beta = value.get("beta_contract", {})
+        if not isinstance(beta, dict) or beta.get("approved") is not True:
+            raise _failure("Perfis beta de leitura ainda não autorizados")
+        if beta.get("scope") != "permission_profiles_only":
+            raise _failure("Escopo beta não certificado")
+        required_fields = {
+            "v2/ThreadStartParams.json": "permissions",
+            "v2/ThreadResumeParams.json": "permissions",
+            "v2/TurnStartParams.json": "permissions",
+            "v2/CommandExecParams.json": "permissionProfile",
         }
-        if (
-            "access" not in properties.get("readOnly", {})
-            or "readOnlyAccess" not in properties.get("workspaceWrite", {})
-            or "readableRoots" not in json.dumps(schema)
-        ):
-            raise _failure("Controle obrigatório de leitura restrita ausente no schema instalado")
+        for filename, field in required_fields.items():
+            relative = "permissions-beta/" + filename
+            if relative not in files:
+                raise _failure("Schema beta obrigatório sem hash")
+            schema = json.loads((path.parent / relative).read_text())
+            if field not in schema.get("properties", {}):
+                raise _failure("Seleção explícita de perfil beta ausente")
     except (OSError, ValueError, KeyError, TypeError) as error:
         raise _failure("Captura de schema inválida ou indisponível") from error
 
@@ -148,19 +163,132 @@ async def inspect_cli(
                 reason=error.info.message,
             ),
         )
+    catalog = await _read_catalog(executable) if auth_code == 0 else ()
     # Successful schema verification still does not prove the operating-system probes.
     return ExecutorCapabilities(
         cli_version=version,
         schema_digest=hashlib.sha256(manifest.read_bytes()).hexdigest(),
         authenticated=auth_code == 0,
-        available_models=(),
+        available_models=catalog,
         supported_methods=_REQUIRED_METHODS,
         sandbox=SandboxCapabilities(
             available=False,
-            restricted_read=True,
+            restricted_read=False,
             bounded_write=False,
             command_network_block=False,
             backend="unverified",
-            reason="Probes nativos pendentes",
+            reason="Contrato beta validado; probes nativos pendentes",
         ),
     )
+
+
+def parse_catalog(value: JsonValue) -> tuple[ModelCapability, ...]:
+    """Validate the external model catalog before creating typed capabilities."""
+    if not isinstance(value, dict) or not isinstance(value.get("data"), list):
+        raise _failure("Catálogo de modelos inválido")
+    result: list[ModelCapability] = []
+    data = value["data"]
+    assert isinstance(data, list)
+    for item in data:
+        if not isinstance(item, dict):
+            raise _failure("Modelo inválido no catálogo")
+        identifier = item.get("model", item.get("id"))
+        name = item.get("displayName")
+        options = item.get("supportedReasoningEfforts")
+        if (
+            not isinstance(identifier, str)
+            or not isinstance(name, str)
+            or not isinstance(options, list)
+        ):
+            raise _failure("Campos de modelo inválidos")
+        efforts: list[str] = []
+        for option in options:
+            if not isinstance(option, dict) or not isinstance(option.get("reasoningEffort"), str):
+                raise _failure("Esforço de modelo inválido")
+            effort = option["reasoningEffort"]
+            assert isinstance(effort, str)
+            efforts.append(effort)
+        result.append(ModelCapability(id=identifier, display_name=name, efforts=tuple(efforts)))
+    return tuple(result)
+
+
+async def _read_catalog(executable: Path) -> tuple[ModelCapability, ...]:
+    """Read metadata only; no thread, tool call or model turn is created."""
+    allowed = {
+        "PATH",
+        "HOME",
+        "USERPROFILE",
+        "APPDATA",
+        "LOCALAPPDATA",
+        "CODEX_HOME",
+        "XDG_CONFIG_HOME",
+        "XDG_DATA_HOME",
+        "SYSTEMROOT",
+        "WINDIR",
+        "TEMP",
+        "TMP",
+    }
+    environment = {key: value for key, value in os.environ.items() if key in allowed}
+    with tempfile.TemporaryDirectory(prefix="quill-inspector-") as directory:
+        process = await asyncio.create_subprocess_exec(
+            str(executable),
+            "app-server",
+            "--listen",
+            "stdio://",
+            "-c",
+            'web_search="disabled"',
+            "-c",
+            "apps._default.enabled=false",
+            "-c",
+            'approval_policy="on-request"',
+            "-c",
+            'approvals_reviewer="user"',
+            cwd=directory,
+            env=environment,
+            stdin=asyncio.subprocess.PIPE,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.DEVNULL,
+            limit=8 * 1024 * 1024,
+        )
+        assert process.stdin is not None and process.stdout is not None
+
+        async def request(identifier: int, method: str, params: dict[str, JsonValue]) -> JsonValue:
+            assert process.stdin is not None and process.stdout is not None
+            process.stdin.write(
+                (json.dumps({"id": identifier, "method": method, "params": params}) + "\n").encode()
+            )
+            await process.stdin.drain()
+            for _ in range(100):
+                line = await asyncio.wait_for(process.stdout.readline(), timeout=15)
+                if not line:
+                    raise _failure("Conexão de inspeção encerrada")
+                message = json.loads(line)
+                if not isinstance(message, dict):
+                    raise _failure("Resposta de inspeção inválida")
+                if message.get("id") == identifier:
+                    if "error" in message:
+                        raise _failure("Codex recusou consulta de metadados")
+                    return cast(JsonValue, message.get("result"))
+                if "id" in message:
+                    raise _failure("Request inesperado na inspeção sem ferramentas")
+            raise _failure("Limite de mensagens da inspeção excedido")
+
+        try:
+            await request(
+                1, "initialize", {"clientInfo": {"name": "quill_inspector", "version": "0.1.0"}}
+            )
+            process.stdin.write(b'{"method":"initialized"}\n')
+            await process.stdin.drain()
+            models = await request(2, "model/list", {"limit": 100, "includeHidden": False})
+            if isinstance(models, dict) and models.get("nextCursor") is not None:
+                raise _failure("Catálogo paginado exige inspeção completa antes da seleção")
+            return parse_catalog(models)
+        except (ValueError, TimeoutError, OSError) as error:
+            raise _failure("Inspeção de metadados indisponível") from error
+        finally:
+            process.stdin.close()
+            try:
+                await asyncio.wait_for(process.wait(), timeout=3)
+            except TimeoutError:
+                process.kill()
+                await process.wait()

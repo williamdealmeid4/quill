@@ -6,18 +6,28 @@ from pathlib import Path
 import pytest
 
 from quill.codex.capabilities import choose_model, validate_schema_manifest
-from quill.core.errors import DomainError, ErrorCode
+from quill.core.errors import DomainError
 from quill.core.models import ModelCapability
 
 pytestmark = pytest.mark.unit
 SCHEMA = Path(__file__).resolve().parents[2] / "schemas/codex/0.167.1/manifest.json"
 
 
-def test_installed_contract_blocks_restricted_read() -> None:
-    with pytest.raises(DomainError) as raised:
-        validate_schema_manifest(SCHEMA)
-    assert raised.value.info.code is ErrorCode.PROTOCOL_INCOMPATIBLE
-    assert "leitura" in raised.value.info.message.lower()
+def test_supported_manifest() -> None:
+    validate_schema_manifest(SCHEMA)
+
+
+def test_unapproved_beta_contract_rejected(tmp_path: Path) -> None:
+    import shutil
+
+    capture = tmp_path / "capture"
+    shutil.copytree(SCHEMA.parent, capture)
+    manifest = capture / "manifest.json"
+    value = json.loads(manifest.read_text())
+    value["beta_contract"] = {"approved": False}
+    manifest.write_text(json.dumps(value))
+    with pytest.raises(DomainError):
+        validate_schema_manifest(manifest)
 
 
 def test_manifest_hash_tampering_blocks(tmp_path: Path) -> None:
@@ -83,3 +93,29 @@ def test_schema_path_escape_rejected(tmp_path: Path) -> None:
     manifest.write_text(json.dumps(value))
     with pytest.raises(DomainError, match="fora do diretório"):
         validate_schema_manifest(manifest)
+
+
+def test_catalog_parser_rejects_wrong_shape() -> None:
+    from quill.codex.capabilities import parse_catalog
+
+    with pytest.raises(DomainError):
+        parse_catalog({"data": [{"id": 42}]})
+
+
+def test_catalog_parser_preserves_efforts() -> None:
+    from quill.codex.capabilities import parse_catalog
+
+    models = parse_catalog(
+        {
+            "data": [
+                {
+                    "model": "fixture-sol",
+                    "displayName": "Fixture Sol",
+                    "supportedReasoningEfforts": [{"reasoningEffort": "low"}],
+                }
+            ]
+        }
+    )
+    assert models == (
+        ModelCapability(id="fixture-sol", display_name="Fixture Sol", efforts=("low",)),
+    )

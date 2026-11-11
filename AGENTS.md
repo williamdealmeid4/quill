@@ -74,3 +74,8 @@ A autorização inicial cobre criar e publicar o repositório público williamde
 ## Handoff para Sol Low
 
 > Leia integralmente AGENTS.md, docs/ARCHITECTURE.md, docs/IMPLEMENTATION_PLAN.md e docs/TASKS.md. Inspecione o Git e preserve alterações preexistentes. Execute somente Q001 conforme arquivos, contratos e critérios documentados. Rode as verificações previstas, registre resultados em docs/TASKS.md e informe a próxima tarefa. Se houver ambiguidade relevante ou pré-requisito ausente, registre o impedimento e pare. Não implemente Q002.
+
+
+## Autorização vigente da sessão — 2026-11-11
+
+O usuário autorizou continuar por etapas sucessivas e usar permission profiles beta para desbloquear Q006–Q008. Isso substitui a parada automática após uma tarefa: validar/commitar cada unidade antes de avançar, preservando dependências e gates. A exceção beta é somente a seleção de perfil descrita na revisão de CODEX_INTEGRATION.md. Não pedir novamente a mesma autorização nem reduzir proteção para contornar novo impedimento.

@@ -258,3 +258,14 @@ Consultadas em 2026-11-11. Constatado localmente Codex 0.167.1; Q006 registra sc
 - [Rive — runtimes](https://rive.app/docs/runtimes/getting-started): alternativa avaliada e adiada.
 
 Riscos de segurança e recuperação são canônicos em [SECURITY.md](SECURITY.md). Testabilidade por fase está em [TESTING.md](TESTING.md).
+
+
+## Revisão autorizada — perfis de permissão beta
+
+Em 2026-11-11, o usuário autorizou revisar Q006–Q008 para perfis beta, mantendo configuração apenas por processo e todos os testes de isolamento. A exceção é restrita a initialize.capabilities.experimentalApi, permissions/runtimeWorkspaceRoots em thread/start, thread/resume e turn/start, além de command/exec.permissionProfile. Demais APIs experimentais continuam proibidas.
+
+O contrato beta é capturado com hashes em schemas/codex/0.167.1/permissions-beta. Contrato aprovado não comprova sandbox: available/restricted_read/bounded_write continuam falsos até probes nativos. Não combinar permissions com sandbox/sandboxPolicy legados. Perfil tem nome único por execução: :minimal e runtime canônico read, somente workspace read/write conforme modo, network.enabled=false. Config global e credenciais não são copiadas nem alteradas.
+
+Probe documentado: codex sandbox -P <perfil> --include-managed-config -C <workspace>, com permissions.<perfil> via -c. Seleção explícita será verificada por sentinelas, sem presumir que default_permissions sobrepõe sandbox_mode antigo. App Server seleciona perfil no request e não envia política legada no mesmo request. Q008 continua exigindo Windows nativo.
+
+O usuário também autorizou etapas sucessivas, cada uma validada e commitada separadamente, substituindo a parada inicial após uma tarefa. Os gates de segurança e plataforma permanecem. O bloqueio anterior é histórico e será atualizado com evidências. Fonte: [Permissions](https://learn.chatgpt.com/docs/permissions), consultada nesta revisão.
