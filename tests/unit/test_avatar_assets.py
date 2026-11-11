@@ -1,5 +1,6 @@
 """Avatar loading validates file bounds before any rendering."""
 
+import hashlib
 import json
 import shutil
 from pathlib import Path
@@ -80,3 +81,16 @@ def test_atlas_symlink_outside_rejected(avatar: Path, tmp_path: Path) -> None:
     source.symlink_to(outside)
     with pytest.raises(DomainError):
         load_avatar(avatar)
+
+
+def test_user_selected_art_is_preserved_exactly() -> None:
+    assert (
+        hashlib.sha256((ROOT / "atlas-0.png").read_bytes()).hexdigest()
+        == "2abc06b7e30a5aa5570fbece377b3e8d8132d6bb4692bd0d0e37ef28cd514541"
+    )
+
+
+def test_selected_art_uses_native_frame_dimensions() -> None:
+    manifest = load_avatar(ROOT)
+    assert manifest.frame_size == (1536, 1024)
+    assert manifest.states["idle"].frames[0].width == 1536

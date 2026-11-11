@@ -142,3 +142,12 @@ O usuário também autorizou etapas sucessivas, cada uma validada e commitada se
 O usuário pediu passar à próxima fase e confirmou a implementação. Q009 depende de Q007 validada, sem esperar Q008. O critério de conclusão desta etapa passa a ser bootstrap/worker no Linux, com teste automático e smoke Wayland; certificação Windows permanece em Q008/Q016/Q035 e não é inferida de testes Linux. Q010–Q015 podem prosseguir pelas dependências locais. Não habilitar execução Codex Windows nem anunciar suporte Windows antes dos gates nativos. O MVP/release multiplataforma mantém as exigências originais.
 
 Instalar PySide6-Essentials 6.12.0 (mesmo namespace PySide6 e módulos QtCore/Gui/Qml/Quick/Controls/Network/DBus) para não puxar WebEngine/PDF sem uso. Addons entram somente quando uma fase precisar. Contratos e desenho Qt permanecem os aprovados. Uma prévia artística por imagegen foi tentada e rejeitada pela ferramenta; não foi produzida nem incorporada. Fixture técnico de Q010 não significa aprovação da arte final.
+
+
+## Direção visual canônica — imagem escolhida pelo usuário
+
+A orientação vigente é pixel art. O usuário rejeitou o fixture geométrico, cancelou o 3D e forneceu a imagem canônica de um furão marrom/creme com olhos e chamas verdes. Usar exatamente o PNG aprovado, preservando transparência e pixels; não redesenhar nem trocar por versões anteriores. A dimensão nativa é 1536×1024; “64 bits” descreve a estética pedida, não autoriza reduzir arbitrariamente o original a 64×64.
+
+Manifesto agora aceita dimensões nativas até 2048 por eixo, com bounds/alpha/orçamento de 64 MiB mantidos. Frame precisa coincidir com frame_size. São permitidas transformações QML de respiração no renderer, sem recodificar a arte. Há uma pose aprovada, não nove animações: blink/fala/poses específicas ficam pendentes até produzir assets fiéis à referência. AvatarPresentation.blinking é um campo aditivo do motor; sua existência não significa que há frames de olhos prontos.
+
+Q012 pode alterar o manifesto/schema/loader/testes de assets e a atribuição para incorporar esta escolha explícita; pode ajustar bootstrap para conectar a janela flutuante e encerrá-la corretamente. A UI deve mostrar a arte aprovada e permitir vê-la em tamanho maior. Os assets antes gerados como prova técnica não são a identidade final.

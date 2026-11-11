@@ -29,7 +29,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 | Q009 | Bootstrap Qt e worker assíncrono | done |
 | Q010 | Manifesto e fixture de avatar | done |
 | Q011 | Máquina de estados da animação | done |
-| Q012 | Mascote e janela Qt | pending |
+| Q012 | Mascote e janela Qt | in_progress |
 | Q013 | Bridge D-Bus limitada | pending |
 | Q014 | Lifecycle da extensão GNOME | pending |
 | Q015 | Renderer e interações GNOME | pending |
@@ -333,7 +333,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ### Q012 — Mascote e janela Qt
 
-1. **Identificador:** Q012. **Estado:** pending.
+1. **Identificador:** Q012. **Estado:** in_progress.
 2. **Objetivo:** Mascote e janela Qt; produzir a capacidade descrita abaixo, sem implementar tarefas seguintes.
 3. **Pré-requisitos:** Q009=done, Q010=done, Q011=done
 4. **Arquivos envolvidos:**
@@ -1065,3 +1065,8 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 ## Revisão vigente de Q006–Q008
 
 O usuário autorizou os perfis beta e continuação sequencial por etapas. Arquivos adicionais permitidos nesta revisão: AGENTS.md e documentos canônicos de arquitetura, plano, segurança e testes, apenas para registrar a exceção/estado. Captura estável preservada; schemas beta limitados à seleção de perfil. Gates de isolamento/Linux/Windows inalterados. Q006 revalidada e concluída; Q007 validada no Linux; Q008 aguarda execução nativa Windows.
+
+
+## Alteração de arte autorizada em Q012
+
+Usar o PNG pixel art fornecido pelo usuário: furão marrom/creme com olhos/chamas verdes. O fixture geométrico e a proposta 3D foram rejeitados. Caminhos adicionais desta tarefa: assets/avatars/quill, schemas/avatar.schema.json, src/quill/avatar/assets.py, tests/unit/test_avatar_assets.py, src/quill/bootstrap.py e documentos canônicos relacionados à nova arte. Há uma pose aprovada; animações específicas continuam pendentes. Preservar dimensões/aspecto/transparência nativos e verificar SHA-256 da cópia.

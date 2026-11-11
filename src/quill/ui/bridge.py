@@ -6,8 +6,11 @@ from collections.abc import Coroutine
 from concurrent.futures import CancelledError, Future
 from uuid import uuid4
 
-from PySide6.QtCore import Property, QObject, Signal, Slot
+from PySide6.QtCore import Property, QObject, Qt, QTimer, QUrl, Signal, Slot
+from PySide6.QtGui import QBitmap, QDesktopServices, QImage, QRegion, QWindow
 
+from quill.avatar.assets import RESOURCE_ROOT, load_avatar
+from quill.avatar.state import AvatarState, AvatarStateManager
 from quill.core.models import JsonValue
 
 
@@ -97,6 +100,10 @@ class ExecutionWorker(QObject):
 class UiBridge(QObject):
     """Presentation intentions only; the real task executor is not connected yet."""
 
+    avatarChanged = Signal()
+    avatarVisibleChanged = Signal()
+    avatarSizeChanged = Signal()
+    reducedMotionChanged = Signal()
     statusChanged = Signal()
     busyChanged = Signal()
     showRequested = Signal()
@@ -109,9 +116,138 @@ class UiBridge(QObject):
         self._status = "Esta é uma prévia local. Nenhuma tarefa será executada."
         self._busy = False
         self._active: str | None = None
+        self._manifest = load_avatar(RESOURCE_ROOT / "assets/avatars/quill")
+        self._avatar_state = AvatarStateManager()
+        self._avatar_visible = True
+        self._surfaces: dict[str, bool] = {}
+        self._mask_image = QImage(str(next(iter(self._manifest.atlases.values())).path))
+        self._animation = QTimer(self)
+        self._animation.setInterval(50)
+        self._animation.timeout.connect(self._tick_avatar)
+        self._reset = QTimer(self)
+        self._reset.setSingleShot(True)
+        self._reset.timeout.connect(self._idle_avatar)
         worker.resultReady.connect(self._completed)
         worker.jobFailed.connect(self._failed)
         worker.jobCancelled.connect(self._cancelled)
+
+    @Property(dict, notify=avatarChanged)
+    def avatar(self) -> dict[str, JsonValue]:
+        presentation = self._avatar_state.presentation
+        animation = self._manifest.states[presentation.state.value]
+        first = animation.frames[0]
+        atlas = self._manifest.atlases[first.atlas]
+        frames: list[JsonValue] = [
+            {"x": frame.x, "y": frame.y, "width": frame.width, "height": frame.height}
+            for frame in animation.frames
+        ]
+        return {
+            "source": atlas.path.as_uri(),
+            "width": first.width,
+            "height": first.height,
+            "atlasWidth": atlas.width,
+            "atlasHeight": atlas.height,
+            "frames": frames,
+            "fps": animation.fps,
+            "loop": animation.loop,
+            "state": presentation.state.value,
+            "blinking": presentation.blinking,
+            "reducedMotion": presentation.reduced_motion,
+        }
+
+    @Property(bool, notify=avatarVisibleChanged)
+    def avatarVisible(self) -> bool:
+        return self._avatar_visible
+
+    @Property(int, notify=avatarSizeChanged)
+    def avatarSize(self) -> int:
+        return self._avatar_state.presentation.size_px
+
+    @Property(bool, notify=reducedMotionChanged)
+    def reducedMotion(self) -> bool:
+        return self._avatar_state.presentation.reduced_motion
+
+    @property
+    def animation_active(self) -> bool:
+        return self._animation.isActive()
+
+    @Slot()
+    def _tick_avatar(self) -> None:
+        before = self._avatar_state.presentation
+        if self._avatar_state.tick() != before:
+            self.avatarChanged.emit()
+
+    @Slot()
+    def _idle_avatar(self) -> None:
+        self._avatar_state.preview(AvatarState.IDLE)
+        self.avatarChanged.emit()
+
+    @Slot(str, bool)
+    def setSurfaceActive(self, name: str, active: bool) -> None:
+        if name not in ("panel", "floating"):
+            return
+        self._surfaces[name] = active
+        visible = any(self._surfaces.values())
+        self._avatar_state.set_visible(visible)
+        if visible and not self.reducedMotion:
+            self._animation.start()
+        else:
+            self._animation.stop()
+
+    @Slot(int)
+    def setAvatarSize(self, size: int) -> None:
+        if not 96 <= size <= 256:
+            return
+        self._avatar_state.set_size(size)
+        self.avatarSizeChanged.emit()
+        self.avatarChanged.emit()
+
+    @Slot(bool)
+    def setReducedMotion(self, reduced: bool) -> None:
+        self._avatar_state.set_reduced_motion(reduced)
+        self.reducedMotionChanged.emit()
+        self.avatarChanged.emit()
+        if reduced:
+            self._animation.stop()
+        elif any(self._surfaces.values()):
+            self._animation.start()
+
+    @Slot()
+    def hideAvatar(self) -> None:
+        self._avatar_visible = False
+        self.avatarVisibleChanged.emit()
+        self.setSurfaceActive("floating", False)
+
+    @Slot()
+    def showAvatar(self) -> None:
+        self._avatar_visible = True
+        self.avatarVisibleChanged.emit()
+
+    @Slot()
+    def showPanel(self) -> None:
+        self.showRequested.emit()
+
+    @Slot()
+    def openArtwork(self) -> None:
+        path = next(iter(self._manifest.atlases.values())).path
+        if not QDesktopServices.openUrl(QUrl.fromLocalFile(str(path))):
+            self._update("Não foi possível abrir a imagem original.", False)
+
+    @Slot(QObject, int, int)
+    def applyAvatarMask(self, window: QObject, width: int, height: int) -> None:
+        if not isinstance(window, QWindow) or width < 1 or height < 1:
+            return
+        scaled = self._mask_image.scaled(
+            width,
+            height,
+            Qt.AspectRatioMode.IgnoreAspectRatio,
+            Qt.TransformationMode.FastTransformation,
+        )
+        window.setMask(QRegion(QBitmap.fromImage(scaled.createAlphaMask())))
+
+    def dispose(self) -> None:
+        self._animation.stop()
+        self._reset.stop()
 
     @Property(str, notify=statusChanged)
     def status(self) -> str:
@@ -130,7 +266,9 @@ class UiBridge(QObject):
     def preview(self) -> None:
         if self._busy:
             return
-        self._update("Um instante…", True)
+        self._update("Testando a resposta local do Quill…", True)
+        self._avatar_state.preview(AvatarState.WORKING)
+        self.avatarChanged.emit()
 
         async def respond() -> str:
             await asyncio.sleep(0.6)
@@ -148,6 +286,7 @@ class UiBridge(QObject):
             self.worker.cancel(self._active)
             self._active = None
         self._update("Prévia interrompida.", False)
+        self._idle_avatar()
 
     @Slot()
     def settings(self) -> None:
@@ -162,12 +301,17 @@ class UiBridge(QObject):
         if identifier == self._active:
             self._active = None
             self._update(str(result), False)
+            self._avatar_state.preview(AvatarState.SUCCESS)
+            self.avatarChanged.emit()
+            self._reset.start(800)
 
     @Slot(str, str)
     def _failed(self, identifier: str, message: str) -> None:
         if identifier == self._active:
             self._active = None
             self._update(message, False)
+            self._avatar_state.preview(AvatarState.ERROR)
+            self.avatarChanged.emit()
 
     @Slot(str)
     def _cancelled(self, identifier: str) -> None:

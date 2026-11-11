@@ -38,10 +38,14 @@
       "maxLength": 200
     },
     "frame_size": {
-      "const": [
-        256,
-        256
-      ]
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 2048
+      }
     },
     "anchor": {
       "type": "array",
@@ -50,7 +54,7 @@
       "items": {
         "type": "integer",
         "minimum": 0,
-        "maximum": 256
+        "maximum": 2048
       }
     },
     "hit_region": {
@@ -64,7 +68,7 @@
         "items": {
           "type": "integer",
           "minimum": 0,
-          "maximum": 256
+          "maximum": 2048
         }
       }
     },
@@ -153,10 +157,14 @@
                     "maximum": 2047
                   },
                   "width": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   },
                   "height": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   }
                 }
               }
@@ -225,10 +233,14 @@
                     "maximum": 2047
                   },
                   "width": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   },
                   "height": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   }
                 }
               }
@@ -297,10 +309,14 @@
                     "maximum": 2047
                   },
                   "width": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   },
                   "height": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   }
                 }
               }
@@ -369,10 +385,14 @@
                     "maximum": 2047
                   },
                   "width": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   },
                   "height": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   }
                 }
               }
@@ -441,10 +461,14 @@
                     "maximum": 2047
                   },
                   "width": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   },
                   "height": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   }
                 }
               }
@@ -513,10 +537,14 @@
                     "maximum": 2047
                   },
                   "width": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   },
                   "height": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   }
                 }
               }
@@ -585,10 +613,14 @@
                     "maximum": 2047
                   },
                   "width": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   },
                   "height": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   }
                 }
               }
@@ -657,10 +689,14 @@
                     "maximum": 2047
                   },
                   "width": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   },
                   "height": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   }
                 }
               }
@@ -729,10 +765,14 @@
                     "maximum": 2047
                   },
                   "width": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   },
                   "height": {
-                    "const": 256
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 2048
                   }
                 }
               }

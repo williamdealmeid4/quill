@@ -97,6 +97,7 @@ class DesktopRuntime:
             raise RuntimeError("A interface do Quill não pôde ser carregada")
         self.window: QWindow = roots[0]
         self.guard.showRequested.connect(self.show)
+        self.bridge.showRequested.connect(self.show)
 
     @Slot()
     def show(self) -> None:
@@ -107,6 +108,7 @@ class DesktopRuntime:
     def shutdown(self) -> None:
         if not self._closed:
             self._closed = True
+            self.bridge.dispose()
             self.worker.shutdown()
             self.window.close()
             self.guard.close()

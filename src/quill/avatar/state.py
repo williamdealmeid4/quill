@@ -132,8 +132,8 @@ class AvatarStateManager:
         self._publish(self._clock.monotonic())
 
     def set_size(self, size: int) -> None:
-        if type(size) is not int or not 96 <= size <= 512:
-            raise ValueError("Tamanho do avatar deve estar entre 96 e 512")
+        if type(size) is not int or not 96 <= size <= 256:
+            raise ValueError("Tamanho do avatar deve estar entre 96 e 256")
         self._size = size
         self._publish(self._clock.monotonic())
 

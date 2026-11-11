@@ -57,6 +57,7 @@ class AvatarAnimation:
 class AvatarManifest:
     id: str
     display_name: str
+    frame_size: tuple[int, int]
     anchor: tuple[int, int]
     hit_region: tuple[tuple[int, int], ...]
     atlases: Mapping[str, Atlas]
@@ -120,6 +121,8 @@ def validate_manifest(value: JsonValue, root: Path) -> AvatarManifest:
     except ValidationError as error:
         raise _failure(f"Manifesto de avatar inválido em {error.json_path}") from error
     raw = _object(value)
+    frame_size = _list(raw["frame_size"])
+    frame_width, frame_height = _number(frame_size[0]), _number(frame_size[1])
     atlases: dict[str, Atlas] = {}
     decoded_bytes = 0
     for entry in _list(raw["atlases"]):
@@ -155,6 +158,8 @@ def validate_manifest(value: JsonValue, root: Path) -> AvatarManifest:
                 raise _failure("Frame referencia atlas desconhecido")
             x, y = _number(frame["x"]), _number(frame["y"])
             width, height = _number(frame["width"]), _number(frame["height"])
+            if (width, height) != (frame_width, frame_height):
+                raise _failure("Frame diverge do tamanho nativo declarado")
             if x + width > atlas.width or y + height > atlas.height:
                 raise _failure("Frame fora dos limites do atlas")
             frames.append(AvatarFrame(atlas=atlas_name, x=x, y=y, width=width, height=height))
@@ -168,9 +173,14 @@ def validate_manifest(value: JsonValue, root: Path) -> AvatarManifest:
     region = tuple(
         (_number(_list(point)[0]), _number(_list(point)[1])) for point in _list(raw["hit_region"])
     )
+    if not all(0 <= x <= frame_width and 0 <= y <= frame_height for x, y in region):
+        raise _failure("Região interativa fora do frame")
+    if _number(anchor[0]) > frame_width or _number(anchor[1]) > frame_height:
+        raise _failure("Âncora fora do frame")
     return AvatarManifest(
         id=_text(raw["id"]),
         display_name=_text(raw["display_name"]),
+        frame_size=(frame_width, frame_height),
         anchor=(_number(anchor[0]), _number(anchor[1])),
         hit_region=region,
         atlases=MappingProxyType(atlases),
