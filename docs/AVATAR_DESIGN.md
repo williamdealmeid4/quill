@@ -98,3 +98,10 @@ Validar GNOME/Wayland e Windows em 100%, 150% e 200% de escala, tema claro/escur
 ## Fontes
 
 Consultadas em 2026-11-11: [AnimatedSprite](https://doc.qt.io/qt-6.12/qml-qtquick-animatedsprite.html), [GJS extensões](https://gjs.guide/extensions/development/creating.html), [janelas Qt](https://doc.qt.io/QT-6/application-windows.html), [SetWindowPos](https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowpos). Paleta, dimensões e estados são decisões do Quill.
+
+
+## Revisão autorizada — avanço Linux com Windows pendente
+
+O usuário pediu passar à próxima fase e confirmou a implementação. Q009 depende de Q007 validada, sem esperar Q008. O critério de conclusão desta etapa passa a ser bootstrap/worker no Linux, com teste automático e smoke Wayland; certificação Windows permanece em Q008/Q016/Q035 e não é inferida de testes Linux. Q010–Q015 podem prosseguir pelas dependências locais. Não habilitar execução Codex Windows nem anunciar suporte Windows antes dos gates nativos. O MVP/release multiplataforma mantém as exigências originais.
+
+Instalar PySide6-Essentials 6.12.0 (mesmo namespace PySide6 e módulos QtCore/Gui/Qml/Quick/Controls/Network/DBus) para não puxar WebEngine/PDF sem uso. Addons entram somente quando uma fase precisar. Contratos e desenho Qt permanecem os aprovados. Uma prévia artística por imagegen foi tentada e rejeitada pela ferramenta; não foi produzida nem incorporada. Fixture técnico de Q010 não significa aprovação da arte final.

@@ -79,3 +79,10 @@ A autorização inicial cobre criar e publicar o repositório público williamde
 ## Autorização vigente da sessão — 2026-11-11
 
 O usuário autorizou continuar por etapas sucessivas e usar permission profiles beta para desbloquear Q006–Q008. Isso substitui a parada automática após uma tarefa: validar/commitar cada unidade antes de avançar, preservando dependências e gates. A exceção beta é somente a seleção de perfil descrita na revisão de CODEX_INTEGRATION.md. Não pedir novamente a mesma autorização nem reduzir proteção para contornar novo impedimento.
+
+
+## Revisão autorizada — avanço Linux com Windows pendente
+
+O usuário pediu passar à próxima fase e confirmou a implementação. Q009 depende de Q007 validada, sem esperar Q008. O critério de conclusão desta etapa passa a ser bootstrap/worker no Linux, com teste automático e smoke Wayland; certificação Windows permanece em Q008/Q016/Q035 e não é inferida de testes Linux. Q010–Q015 podem prosseguir pelas dependências locais. Não habilitar execução Codex Windows nem anunciar suporte Windows antes dos gates nativos. O MVP/release multiplataforma mantém as exigências originais.
+
+Instalar PySide6-Essentials 6.12.0 (mesmo namespace PySide6 e módulos QtCore/Gui/Qml/Quick/Controls/Network/DBus) para não puxar WebEngine/PDF sem uso. Addons entram somente quando uma fase precisar. Contratos e desenho Qt permanecem os aprovados. Uma prévia artística por imagegen foi tentada e rejeitada pela ferramenta; não foi produzida nem incorporada. Fixture técnico de Q010 não significa aprovação da arte final.

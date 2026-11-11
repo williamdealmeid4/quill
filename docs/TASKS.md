@@ -26,7 +26,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 | Q006 | Contrato real do Codex e capabilities | done |
 | Q007 | Probes de isolamento Linux | done |
 | Q008 | Probes de isolamento Windows 11 | blocked |
-| Q009 | Bootstrap Qt e worker assíncrono | pending |
+| Q009 | Bootstrap Qt e worker assíncrono | done |
 | Q010 | Manifesto e fixture de avatar | pending |
 | Q011 | Máquina de estados da animação | pending |
 | Q012 | Mascote e janela Qt | pending |
@@ -258,9 +258,9 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ### Q009 — Bootstrap Qt e worker assíncrono
 
-1. **Identificador:** Q009. **Estado:** pending.
+1. **Identificador:** Q009. **Estado:** done.
 2. **Objetivo:** Bootstrap Qt e worker assíncrono; produzir a capacidade descrita abaixo, sem implementar tarefas seguintes.
-3. **Pré-requisitos:** Q002=done, Q003=done, Q005=done, Q008=done
+3. **Pré-requisitos:** Q002=done, Q003=done, Q005=done, Q007=done
 4. **Arquivos envolvidos:**
    - Criar: `src/quill/bootstrap.py`
    - Criar: `src/quill/ui/bridge.py`
@@ -271,15 +271,15 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
    - Modificar: `pyproject.toml`
    - Modificar: `uv.lock`
    - Modificar somente o progresso desta entrada em `docs/TASKS.md`.
-5. **Instruções técnicas:** Adicionar PySide6 6.12.x e pytest-qt; resolver patch compatível com Python 3.13 nos dois SOs. Preservar --version sem import Qt. bootstrap monta QApplication/QML e ExecutionWorker com event loop asyncio em thread própria; façade Qt em ui/bridge encaminha intenções por queued signals. Ainda sem Codex real. Fechamento encerra thread/loop com prazo. Implementar instância única com QLockFile/QLocalServer; segunda abertura só mostra o painel da primeira, sem nova fila.
+5. **Instruções técnicas:** Adicionar PySide6-Essentials 6.12.0 e pytest-qt; resolver patch compatível com Python 3.13 nos dois SOs. Preservar --version sem import Qt. bootstrap monta QApplication/QML e ExecutionWorker com event loop asyncio em thread própria; façade Qt em ui/bridge encaminha intenções por queued signals. Ainda sem Codex real. Fechamento encerra thread/loop com prazo. Implementar instância única com QLockFile/QLocalServer; segunda abertura só mostra o painel da primeira, sem nova fila.
    **Entradas e saídas / interfaces:** bootstrap.main()->int; UiBridge com submit/cancel/settings slots; ExecutionWorker executa coroutine e retorna DTO por sinal. Contexto QML chama somente bridge.
-6. **Critérios de aceitação:** Janela abre/fecha nas duas máquinas, sem thread/processo residual e sem I/O lento na main thread.
-7. **Testes necessários:** test_window_opens_and_closes; test_slow_fake_does_not_freeze_ui; test_shutdown_stops_worker; test_version_still_headless; test_second_instance_reopens_first_without_worker. Offscreen automático e abertura manual nativa Linux/Windows.
+6. **Critérios de aceitação:** Janela abre/fecha no Linux; gate Windows continua Q008/Q016/Q035, sem thread/processo residual e sem I/O lento na main thread.
+7. **Testes necessários:** test_window_opens_and_closes; test_slow_fake_does_not_freeze_ui; test_shutdown_stops_worker; test_version_still_headless; test_second_instance_reopens_first_without_worker. Offscreen automático e abertura nativa Linux; Windows pendente nos gates próprios.
    **Comando específico:** `uv run pytest tests/ui/test_startup.py -q`
    Rodar também os checks gerais pertinentes de [TESTING.md](TESTING.md); opt-in explícito para live_codex e evidência nativa onde exigida.
-8. **Comportamento esperado:** Janela abre/fecha nas duas máquinas, sem thread/processo residual e sem I/O lento na main thread. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
+8. **Comportamento esperado:** Janela abre/fecha no Linux; gate Windows continua Q008/Q016/Q035, sem thread/processo residual e sem I/O lento na main thread. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
 9. **Condição de conclusão:** C0 e todos os critérios acima. **Recuperação:** preservar alterações anteriores; interromper/limpar recursos da própria tarefa com finally; se requisito nativo/contrato falhar, registrar blocked com evidência e procedimento necessário, sem workaround inseguro.
-   **Evidências:** ainda não executada; nenhum teste de aplicativo atribuído a esta tarefa.
+   **Evidências:** 2026-11-11T20:21:30+00:00. RED: bootstrap ausente. GREEN: cinco testes Qt passam (lifecycle, worker asyncio sem congelar UI, shutdown, CLI headless e segunda instância). Suíte padrão total 63 passed, 16 deselected; Ruff/formato/mypy passam. Smoke nativo Wayland abriu janela 440x620 e capturou somente a própria janela em /tmp/quill-q009.png; shutdown concluiu sem worker residual. Avisos QML de teardown corrigidos destruindo engine antes da bridge. Certificação Windows permanece Q008/Q016/Q035, conforme avanço Linux autorizado.
 10. **Dependências para a próxima tarefa:** Q010 (além das demais dependências listadas nela).
 
 ## Fase — Avatar e plataformas

@@ -10,7 +10,9 @@ def main() -> int:
     parser = argparse.ArgumentParser(prog="quill", description="Assistente desktop Quill")
     parser.add_argument("--version", action="version", version=__version__)
     parser.parse_args()
-    return 0
+    from quill.bootstrap import main as desktop_main
+
+    return desktop_main()
 
 
 if __name__ == "__main__":
