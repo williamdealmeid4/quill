@@ -18,7 +18,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 | ID | Tarefa | Estado |
 |---|---|---|
-| Q001 | Fundação Python | pending |
+| Q001 | Fundação Python | done |
 | Q002 | Configuração tipada e caminhos | pending |
 | Q003 | Logs estruturados e redação | pending |
 | Q004 | Modelos, interfaces e erros | pending |
@@ -73,7 +73,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ### Q001 — Fundação Python
 
-1. **Identificador:** Q001. **Estado:** pending.
+1. **Identificador:** Q001. **Estado:** done.
 2. **Objetivo:** Fundação Python; produzir a capacidade descrita abaixo, sem implementar tarefas seguintes.
 3. **Pré-requisitos:** Nove documentos presentes/revisados, commit documental publicado e estado Git inspecionado; nenhum código prévio presumido.
 4. **Arquivos envolvidos:**
@@ -93,7 +93,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
    Rodar também os checks gerais pertinentes de [TESTING.md](TESTING.md); opt-in explícito para live_codex e evidência nativa onde exigida.
 8. **Comportamento esperado:** CLI funciona após uv sync --frozen --group dev; lint/formato/tipagem/suíte passam; consultar versão não cria janela nem arquivos de usuário. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
 9. **Condição de conclusão:** C0 e todos os critérios acima. **Recuperação:** preservar alterações anteriores; interromper/limpar recursos da própria tarefa com finally; se requisito nativo/contrato falhar, registrar blocked com evidência e procedimento necessário, sem workaround inseguro.
-   **Evidências:** ainda não executada; nenhum teste de aplicativo atribuído a esta tarefa.
+   **Evidências:** 2026-11-11T19:16:09+00:00, Linux x86_64, Python 3.13.15, uv 0.12.19. RED: três testes falharam por módulo ausente. GREEN: `uv run pytest tests/unit/test_cli.py -q` e `uv run pytest -q`: 3 passed, exit 0. `uv sync --frozen --group dev`, `uv run ruff check .`, `uv run ruff format --check .`, `uv run mypy src/quill`, `git diff --check`: exit 0. CLI --version imprime 0.1.0. Ruff inclui apenas Python/TOML para preservar exemplos documentais. Sem validação Windows nesta tarefa de fundação; gates nativos continuam pendentes.
 10. **Dependências para a próxima tarefa:** Q002 (além das demais dependências listadas nela).
 
 ### Q002 — Configuração tipada e caminhos

@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "quill"
+version = "0.1.0"
+description = "Assistente desktop com avatar animado e automação consentida"
+requires-python = ">=3.13,<3.14"
+dependencies = []
+
+[dependency-groups]
+dev = ["pytest", "ruff", "mypy"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/quill"]
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+include = ["*.py", "*.pyi", "pyproject.toml"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers -m 'not live_codex and not manual'"
+markers = [
+    "unit: testes unitários sem serviços externos",
+    "integration: integração entre componentes",
+    "ui: interface Qt",
+    "security: controles de segurança",
+    "live_codex: Codex real, somente com opt-in",
+    "manual: validação manual nativa",
+]
