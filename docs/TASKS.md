@@ -333,7 +333,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
 
 ### Q012 — Mascote e janela Qt
 
-1. **Identificador:** Q012. **Estado:** in_progress.
+1. **Identificador:** Q012. **Estado:** done.
 2. **Objetivo:** Mascote e janela Qt; produzir a capacidade descrita abaixo, sem implementar tarefas seguintes.
 3. **Pré-requisitos:** Q009=done, Q010=done, Q011=done
 4. **Arquivos envolvidos:**
@@ -351,7 +351,7 @@ Conclusão comum C0: critérios e testes próprios passam, checks gerais pertine
    Rodar também os checks gerais pertinentes de [TESTING.md](TESTING.md); opt-in explícito para live_codex e evidência nativa onde exigida.
 8. **Comportamento esperado:** Mascote não captura tela inteira, não rouba foco ao animar e oculta/reabre sem duplicar janela. Em falha, emitir ErrorInfo compatível e preservar recursos fora do escopo; não ampliar permissão, reenviar efeito incerto ou substituir arquitetura.
 9. **Condição de conclusão:** C0 e todos os critérios acima. **Recuperação:** preservar alterações anteriores; interromper/limpar recursos da própria tarefa com finally; se requisito nativo/contrato falhar, registrar blocked com evidência e procedimento necessário, sem workaround inseguro.
-   **Evidências:** ainda não executada; nenhum teste de aplicativo atribuído a esta tarefa.
+   **Evidências:** 2026-11-16T11:11:47+00:00, Linux x86_64, Wayland. `uv sync --frozen --group dev` (0); `uv run pytest -q` (0; 85 passed, 16 deselected); `uv run ruff check .` (0); `uv run ruff format --check .` (0; 40 arquivos); `uv run mypy src/quill` (0; 27 arquivos). `tests/ui/test_avatar.py` está incluído na suíte; 6 testes passaram. Smoke visual nativo Wayland abriu o painel com a arte PNG aprovada, transparência, escala e menu do mascote; captura de prévia em `/tmp/quill-selected-preview.png`. Janela não rouba foco durante animação; animações de piscar/expressão aguardam novos frames aprovados. Commit da implementação: `885fe5b`; esta atualização fecha o registro da tarefa.
 10. **Dependências para a próxima tarefa:** Q013 (além das demais dependências listadas nela).
 
 ### Q013 — Bridge D-Bus limitada
